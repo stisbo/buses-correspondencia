@@ -1,15 +1,11 @@
 <?php
-// if (isset($_COOKIE['user_obj'])) {
-//   $user = json_decode($_COOKIE['user_obj']);
-// } else {
-//   header('Location: ../auth/login.php');
-//   die();
-// } 
+if (isset($_COOKIE['user_obj'])) {
+  $user = json_decode($_COOKIE['user_obj']);
+} else {
+  header('Location: ../auth/login.php');
+  die();
+}
 
-$user->idUsuario = 0;
-$user->nombre = 'HOLA';
-$user->alias = 'HOsssssLA';
-$user->rol = 'ADMIN';
 ?>
 
 <!DOCTYPE html>

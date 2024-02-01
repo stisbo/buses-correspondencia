@@ -6,8 +6,13 @@ if (isset($_COOKIE['user_obj'])) {
   header('Location: ../auth/login.php');
   die();
 }
+require_once('../app/models/lugar.php');
+require_once('../app/config/accesos.php');
+require_once('../app/config/database.php');
 
+use App\Models\Lugar;
 
+$lugares = Lugar::all();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -68,14 +73,8 @@ if (isset($_COOKIE['user_obj'])) {
                     </div>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
-                        <select name="origen" class="form-select" required>
-                          <option value="EFECTIVO">EFECTIVO</option>
-                          <option value="CHEQUE">CHEQUE</option>
-                          <option value="DEPOSITO">DEPOSITO</option>
-                          <option value="GIRO">GIRO</option>
-                          <option value="TARJETA">TARJETA</option>
-                          <option value="BANCO">BANCO</option>
-                          <option value="QR">QR</option>
+                        <select name="origen" disabled class="form-select disabled">
+                          <option value="<?=$user->idLugar?>"><?=$user->lugar?></option>
                         </select>
                         <label for="">Lugar Origen</label>
                       </div>
@@ -107,7 +106,11 @@ if (isset($_COOKIE['user_obj'])) {
                     </div>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" placeholder="Destino" value="" name="destino">
+                        <select name="destino" class="form-select">
+                          <?php foreach ($lugares as $lugar):?>
+                            <option value="<?=$lugar['idLugar']?>"><?=$lugar['lugar']?></option>
+                          <?php endforeach; ?>
+                        </select>
                         <label for="">Destino</label>
                       </div>
                     </div>

@@ -14,7 +14,7 @@ class Accesos {
     // $empresa = $stmt->fetch();
     // echo 'PASO UNONNNNNNN ---  ' . $pin;
     $empresas = [
-      'bolivar' => ['base' => 'correpondencia', 'permisos' => []],
+      'bolivar' => ['base' => 'correspondencia', 'permisos' => []],
       'illimani' => ['base' => 'correpondencia2', 'permisos' => []],
     ];
     $empresa = isset($empresas[$pin]) ? $empresas[$pin] : null;
