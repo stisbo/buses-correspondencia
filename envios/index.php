@@ -5,7 +5,14 @@ if (isset($_COOKIE['user_obj'])) {
   header('Location: ../auth/login.php');
   die();
 }
+require_once('../app/config/accesos.php');
+require_once('../app/config/database.php');
+require_once('../app/models/envio.php');
 
+use App\Models\Envio;
+
+$envio = new Envio(1);
+print_r($envio);
 ?>
 
 <!DOCTYPE html>

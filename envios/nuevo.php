@@ -48,20 +48,20 @@ $lugares = Lugar::all();
           </div>
           <div class="row" id="card-egresos">
             <form id="form_nuevo">
-              <input type="hidden" id="type_file_upload" name="tipo_file" value="">
+              <input type="hidden" name="id_usuario_envio" value="<?= $user->idUsuario ?>">
               <div class="card shadow">
                 <div class="card-body">
                   <div class="row">
                     <p class="fs-4 fw-bold"><i class="fa fa-solid fa-boxes-packing"></i> Datos remitente</p>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="nombre_remitente" value="" placeholder="Remitente" autocomplete="off">
+                        <input type="text" class="form-control" id="nombre_remitente" value="" placeholder="Remitente" name="nombre_origen" autocomplete="off">
                         <label for="nombre_remitente">Nombre remitente</label>
                       </div>
                     </div>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="ci_remitente" value="" placeholder="Carnet de identidad" autocomplete="off">
+                        <input type="text" class="form-control" id="ci_remitente" value="" name="ci_origen" placeholder="Carnet de identidad" autocomplete="off">
                         <label for="ci_remitente">C.I. remitente</label>
                       </div>
                     </div>
@@ -72,43 +72,54 @@ $lugares = Lugar::all();
                       </div>
                     </div>
                     <div class="col-md-4">
+                      <input type="hidden" name="origen" value="<?= $user->idLugar ?>">
                       <div class="form-floating mb-3">
-                        <select name="origen" disabled class="form-select disabled">
-                          <option value="<?=$user->idLugar?>"><?=$user->lugar?></option>
-                        </select>
+                        <input type="text" class="form-control" value="<?= $user->lugar ?>" disabled>
                         <label for="">Lugar Origen</label>
                       </div>
                     </div>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" placeholder="Observacion" name="observacion">
+                        <input type="text" class="form-control" placeholder="Observacion" name="detalle_envio">
                         <label for="">Detalle envio</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" placeholder="Observacion" name="celular_origen" value="">
+                        <label for="">Celular (opcional)</label>
                       </div>
                     </div>
                     <p class="fs-4 fw-bold"><i class="fa fa-solid fa-people-carry-box"></i> Datos receptor</p>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" placeholder="Nombre receptor" name="nombre_receptor">
+                        <input type="text" class="form-control" placeholder="Nombre receptor" name="nombre_destino">
                         <label for="">Nombre receptor</label>
                       </div>
                     </div>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="ci_receptor" value="" placeholder="Carnet de identidad" autocomplete="off">
+                        <input type="text" class="form-control" id="ci_receptor" value="" name="ci_destino" placeholder="Carnet de identidad" autocomplete="off">
                         <label for="ci_receptor">C.I. receptor</label>
                       </div>
                     </div>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
-                        <input type="datetime-local" class="form-control" placeholder="Fecha llegada" name="fecha_llegada" required value="">
+                        <input type="text" class="form-control" id="celular_destino" value="" name="celular_destino" placeholder="Celular Destino" autocomplete="off">
+                        <label for="celular_destino">Celular receptor (opcional)</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="datetime-local" class="form-control" placeholder="Fecha llegada" name="fecha_estimada" required value="">
                         <label for="">Fecha - hora llegada (estimado)</label>
                       </div>
                     </div>
                     <div class="col-md-4">
                       <div class="form-floating mb-3">
                         <select name="destino" class="form-select">
-                          <?php foreach ($lugares as $lugar):?>
-                            <option value="<?=$lugar['idLugar']?>"><?=$lugar['lugar']?></option>
+                          <?php foreach ($lugares as $lugar) : ?>
+                            <option value="<?= $lugar['idLugar'] ?>"><?= $lugar['lugar'] ?></option>
                           <?php endforeach; ?>
                         </select>
                         <label for="">Destino</label>
@@ -133,9 +144,7 @@ $lugares = Lugar::all();
   <script src="../js/scripts.js"></script>
   <script src="../assets/datatables/datatables.jquery.min.js"></script>
   <script src="../assets/datatables/datatables.bootstrap5.min.js"></script>
-  <script src="./js/draw.js"></script>
-  <script src="./js/pago.js"></script>
-  <script src="./js/handlers.js"></script>
+  <script src="./js/app.js"></script>
 </body>
 
 </html>
