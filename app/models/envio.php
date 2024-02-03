@@ -15,7 +15,20 @@ class Envio {
 	  e.*
   FROM tblEnvio e
   WHERE e.estado = 'ENVIADO'";
-  private static $sql_recibo = "";
+  private static
+    $sql = "SELECT  
+	  (SELECT lugar FROM tblLugar WHERE idLugar = e.id_lugar_origen) as origen,
+	  (SELECT lugar FROM tblLugar WHERE idLugar = e.id_lugar_destino) as destino,
+	  (SELECT nombre FROM tblUsuario WHERE idUsuario = e.id_usuario_envio) as usuario_envio,
+	  e.*
+  FROM tblEnvio e";
+  private static $sql_recibo = "SELECT  
+	  (SELECT lugar FROM tblLugar WHERE idLugar = e.id_lugar_origen) as origen,
+	  (SELECT lugar FROM tblLugar WHERE idLugar = e.id_lugar_destino) as destino,
+	  (SELECT nombre FROM tblUsuario WHERE idUsuario = e.id_usuario_envio) as usuario_envio,
+	  e.*
+  FROM tblEnvio e
+  WHERE e.estado != 'ENTREGADO'";
   public int $idEnvio;
   public string $codigo;
   public int $id_usuario_envio;
@@ -35,16 +48,12 @@ class Envio {
   public string $celular_destino;
   public string $destino;
 
-  public function __construct($idEnvio = 0, $envio = 'ENVIO') {
+  public function __construct($idEnvio = 0) {
     if ($idEnvio == 0) {
       $this->objectNull();
     } else {
       $con = Database::getInstace();
-      if ($envio == 'ENVIO') {
-        $sql = self::$sql_envio . " AND e.idEnvio = $idEnvio";
-      } else { // recepcion 
-        $sql = self::$sql_recibo . " AND e.idEnvio = $idEnvio";
-      }
+      $sql = self::$sql . " WHERE e.idEnvio = $idEnvio";
       $stmt = $con->prepare($sql);
       $stmt->execute();
       $row = $stmt->fetch();
@@ -133,5 +142,36 @@ class Envio {
   }
   public function genCode() {
     return strtoupper(substr(uniqid(), -6));
+  }
+
+  public static function getRecibir($idDestino, $estado = null) {
+    try {
+      $sql = self::$sql_recibo . " AND e.id_lugar_destino = $idDestino";
+      if ($estado != null) {
+        $sql .= " AND e.estado = '$estado'";
+      }
+      $con = Database::getInstace();
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $rows = $stmt->fetchAll();
+      return $rows;
+    } catch (\Throwable $th) {
+      //throw $th;
+      print_r($th);
+    }
+    return [];
+  }
+  public static function getEntregados($idUsuario) {
+    try {
+      $sql = self::$sql . " WHERE e.id_usuario_recibe = $idUsuario";
+      $con = Database::getInstace();
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $rows = $stmt->fetchAll();
+      return $rows;
+    } catch (\Throwable $th) {
+      //throw $th;
+    }
+    return [];
   }
 }

@@ -11,8 +11,6 @@ require_once('../app/models/envio.php');
 
 use App\Models\Envio;
 
-$envio = new Envio(1);
-print_r($envio);
 ?>
 
 <!DOCTYPE html>
@@ -40,11 +38,10 @@ print_r($envio);
       <main id="main_egresos">
         <div class="container-fluid px-4">
           <div class="mt-4">
-            <h1>Proyectos Ingreso</h1>
+            <h1>Envios</h1>
           </div>
           <div class="buttons-head col-md-6 col-sm-12 mb-3">
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_ingreso_nuevo" data-idproyecto="0"><i class="fa fa-plus"></i> Nuevo Proyecto </button>
-            <a class="btn btn-primary" type="button" href="./nuevo.php"><i class="fa fa-solid fa-hand-holding-dollar"></i> Nuevo pago</a>
+            <a class="btn btn-primary" type="button" href="./nuevo.php"><i class="fa fa-solid fa-plus"></i> Nuevo Envio</a>
           </div>
           <div class="row" id="card-egresos">
             <div class="card shadow">
@@ -59,13 +56,13 @@ print_r($envio);
                     <thead>
                       <tr>
                         <th class="text-center">N° ID</th>
-                        <th class="text-center">Descripción</th>
-                        <th class="text-center">Tipo</th>
-                        <th class="text-center">Monto Ref.</th>
-                        <th class="text-center">Monto pagado</th>
-                        <th class="text-center">Creado por</th>
-                        <th class="text-center">Fecha creación</th>
-                        <th class="text-center">Acciones</th>
+                        <th class="text-center">Codigo</th>
+                        <th class="text-center">Remitente</th>
+                        <th class="text-center">Destinatario</th>
+                        <th class="text-center">Lugar Destino</th>
+                        <th class="text-center">Fecha envio</th>
+                        <th class="text-center">Estado</th>
+                        <th class="text-center">Opciones</th>
                       </tr>
                     </thead>
                     <tbody id="t_body_ingresos">

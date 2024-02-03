@@ -210,3 +210,13 @@ async function cambiarColor() {
     })
   }
 }
+
+function toast(title, text, icon = 'success', time = 1500) {
+  $.toast({
+    heading: title,
+    text,
+    icon,
+    position: 'top-right',
+    hideAfter: time
+  })
+}

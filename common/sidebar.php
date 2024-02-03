@@ -24,8 +24,7 @@
         </a>
         <div class="collapse" id="recepcionCollapse" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
           <nav class="sb-sidenav-menu-nested nav">
-            <a class="nav-link" href="../recepcion/nuevos.php">Lista sin recibir</a>
-            <a class="nav-link" href="../recepcion/">Lista recibidos</a>
+            <a class="nav-link" href="../recepcion/">Lista recepción</a>
             <a class="nav-link" href="../recepcion/entregados.php">Entregados</a>
           </nav>
         </div>

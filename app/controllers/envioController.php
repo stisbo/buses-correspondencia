@@ -30,6 +30,33 @@ class EnvioController {
   }
   public function envios_nuevos($data) {
   }
-  public function envios_recibidos($data) {
+  public function lista_envios_a_recibir($data) {
+    if (isset($data['idLugar'])) {
+      $estado = $data['estado'] ?? null;
+      $envios = Envio::getRecibir($data['idLugar'], $estado);
+      echo json_encode(['status' => 'success', 'envios' => $envios]);
+    } else {
+      echo json_encode(['status' => 'error', 'mensaje' => 'Necesario datos de usuario COOKIES']);
+    }
+  }
+  public function lista_entregados($data) {
+    if (isset($data['idUsuario'])) {
+      $envios = Envio::getEntregados($data['idUsuario']);
+      echo json_encode(['status' => 'success', 'envios' => $envios]);
+    } else {
+      echo json_encode(['status' => 'error', 'mensaje' => 'Necesario datos de usuario COOKIES']);
+    }
+  }
+  public function envio($data) {
+    if (isset($data['idEnvio'])) {
+      $envio = new Envio($data['idEnvio']);
+      if ($envio->idEnvio) {
+        echo json_encode(['status' => 'success', 'envio' => $envio]);
+      } else {
+        echo json_encode(['status' => 'error', 'message' => 'Envio no encontrado']);
+      }
+    } else {
+      echo json_encode(['status' => 'error', 'message' => 'Necesario datos id de envio']);
+    }
   }
 }

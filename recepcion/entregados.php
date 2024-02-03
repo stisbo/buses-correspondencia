@@ -32,48 +32,26 @@ if (isset($_COOKIE['user_obj'])) {
       <main id="main_egresos">
         <div class="container-fluid px-4">
           <div class="mt-4">
-            <h1>Recepción</h1>
+            <h1>Entregados</h1>
           </div>
-          <!-- <div class="buttons-head col-md-6 col-sm-12 mb-3">
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_egreso_nuevo" data-idproyecto="0"><i class="fa fa-plus"></i> Nuevo Proyecto </button>
-            <a class="btn btn-primary" type="button" href="./nuevo.php"><i class="fa fa-solid fa-hand-holding-dollar"></i> Nuevo pago</a>
-          </div> -->
           <div class="row" id="card-egresos">
             <div class="card shadow">
-              <div class="card-header d-flex flex-wrap justify-content-between">
-                <div class="btn-group" role="group" aria-label="Basic example">
-                  <button type="button" class="btn btn-outline-success fw-bold filter-btns" data-value="RECIBIDO">RECIBIDOS</button>
-                  <button type="button" class="btn btn-outline-warning fw-bold filter-btns" data-value="ENVIADO">PENDIENTES</button>
-                  <button type="button" class="btn btn-outline-primary fw-bold active filter-btns" data-value="">TODOS</button>
-                </div>
-                <div>
-                  <!-- <select class="form-select" id="filter_year">
-                    <?php for ($i = 0; $i < 5; $i++) : ?>
-                      <option value="<?= date('Y', strtotime('-' . $i . ' year')) ?>"><?= date('Y', strtotime('-' . $i . ' year')) ?></option>
-                    <?php endfor; ?>
-                  </select> -->
-                </div>
-              </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table style="width:100%" class="table table-hover" id="table_recepcion">
+                  <table style="width:100%" class="table table-hover" id="table_entregados">
                     <thead>
                       <tr>
                         <th class="text-center">N° ID</th>
                         <th class="text-center">Código</th>
-                        <th class="text-center">Fecha envio</th>
-                        <th class="text-center">Estado</th>
-                        <th class="text-center">Detalle</th>
                         <th class="text-center">Fecha llegada</th>
+                        <th class="text-center">Fecha entrega</th>
+                        <th class="text-center">Observaciones</th>
                         <th class="text-center">Nombre receptor</th>
                         <th class="text-center">C.I. receptor</th>
                         <th class="text-center">Celular receptor</th>
-                        <th class="text-center">Acciones</th>
                       </tr>
                     </thead>
-                    <tbody id="t_body_recepcion">
-
-                    </tbody>
+                    <tbody id="t_body_entregados"></tbody>
                   </table>
                 </div>
               </div>
@@ -87,7 +65,7 @@ if (isset($_COOKIE['user_obj'])) {
   <script src="../js/scripts.js"></script>
   <script src="../assets/datatables/datatables.jquery.min.js"></script>
   <script src="../assets/datatables/datatables.bootstrap5.min.js"></script>
-  <script src="./js/app.js"></script>
+  <script src="./js/entregados.js"></script>
 </body>
 
 </html>
