@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Config\Database;
-use ReflectionClass;
 
 
 class Envio {
@@ -33,6 +32,7 @@ class Envio {
   public string $codigo;
   public int $id_usuario_envio;
   public string $usuario_envio;
+  public int $id_usuario_entrega;
   public int $id_usuario_recibe;
   public string $usuario_recibe;
   public string $estado, $detalle_envio, $fecha_envio, $fecha_llegada, $observacion_llegada, $fecha_estimada;
@@ -47,6 +47,7 @@ class Envio {
   public int $id_lugar_destino;
   public string $celular_destino;
   public string $destino;
+  public string $fecha_entrega;
 
   public function __construct($idEnvio = 0) {
     if ($idEnvio == 0) {
@@ -132,6 +133,8 @@ class Envio {
     $this->id_lugar_destino = 0;
     $this->celular_destino = "";
     $this->destino = "";
+    $this->fecha_entrega = "";
+    $this->id_usuario_entrega = 0;
   }
   public function load($row) {
     foreach ($this as $nombre => $valor) {
@@ -163,7 +166,20 @@ class Envio {
   }
   public static function getEntregados($idUsuario) {
     try {
-      $sql = self::$sql . " WHERE e.id_usuario_recibe = $idUsuario";
+      $sql = self::$sql . " WHERE e.id_usuario_entrega = $idUsuario";
+      $con = Database::getInstace();
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $rows = $stmt->fetchAll();
+      return $rows;
+    } catch (\Throwable $th) {
+      //throw $th;
+    }
+    return [];
+  }
+  public static function get_mis_envios($idUsuario) {
+    try {
+      $sql = self::$sql . " WHERE e.id_usuario_envio = $idUsuario";
       $con = Database::getInstace();
       $stmt = $con->prepare($sql);
       $stmt->execute();

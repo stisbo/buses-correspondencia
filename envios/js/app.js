@@ -3,7 +3,7 @@ $(document).on('submit', '#form_nuevo', async (e) => {
   e.preventDefault();
 
   if (!formulario) {
-    formulario = false;
+    formulario = true;
     const data = $(e.target).serialize();
     console.log(data);
     const res = await $.ajax({
@@ -39,3 +39,4 @@ $(document).on('submit', '#form_nuevo', async (e) => {
     // }
   }
 })
+

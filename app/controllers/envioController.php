@@ -28,8 +28,7 @@ class EnvioController {
       echo json_encode(['status' => 'error', 'mensaje' => 'Error al registrar el envio']);
     }
   }
-  public function envios_nuevos($data) {
-  }
+
   public function lista_envios_a_recibir($data) {
     if (isset($data['idLugar'])) {
       $estado = $data['estado'] ?? null;
@@ -52,6 +51,52 @@ class EnvioController {
       $envio = new Envio($data['idEnvio']);
       if ($envio->idEnvio) {
         echo json_encode(['status' => 'success', 'envio' => $envio]);
+      } else {
+        echo json_encode(['status' => 'error', 'message' => 'Envio no encontrado']);
+      }
+    } else {
+      echo json_encode(['status' => 'error', 'message' => 'Necesario datos id de envio']);
+    }
+  }
+  public function registra_llegada($data) {
+    date_default_timezone_set('America/La_Paz');
+    $user = json_decode($_COOKIE['user_obj']);
+    if (isset($data['idEnvio'])) {
+      $envio = new Envio($data['idEnvio']);
+      $anterior = clone $envio;
+      if ($envio->idEnvio) {
+        $envio->estado = "RECIBIDO";
+        $envio->fecha_llegada = date('Y-d-m H:i:s');
+        $envio->id_usuario_recibe = $user->idUsuario;
+        $res = $envio->update($anterior);
+        if ($res > 0) {
+          echo json_encode(['status' => 'success', 'message' => 'Envio registrado como recibido']);
+        } else {
+          echo json_encode(['status' => 'error', 'message' => 'Error al registrar el envio']);
+        }
+      } else {
+        echo json_encode(['status' => 'error', 'message' => 'Envio no encontrado']);
+      }
+    } else {
+      echo json_encode(['status' => 'error', 'message' => 'Necesario datos id de envio']);
+    }
+  }
+  public function registra_entrega($data) {
+    $user = json_decode($_COOKIE['user_obj']);
+    if (isset($data['idEnvio'])) {
+      $envio = new Envio($data['idEnvio']);
+      $anterior = clone $envio;
+      if ($envio->idEnvio) {
+        $envio->estado = "ENTREGADO";
+        $envio->fecha_entrega = date('Y-d-m H:i:s');
+        $envio->id_usuario_entrega = $user->idUsuario;
+        $envio->observacion_llegada = $data['obs'];
+        $res = $envio->update($anterior);
+        if ($res > 0) {
+          echo json_encode(['status' => 'success', 'message' => 'Envio registrado como entregado']);
+        } else {
+          echo json_encode(['status' => 'error', 'message' => 'Error al registrar el envio']);
+        }
       } else {
         echo json_encode(['status' => 'error', 'message' => 'Envio no encontrado']);
       }

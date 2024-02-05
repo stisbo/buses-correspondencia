@@ -47,7 +47,6 @@ function generarTabla(data) {
     <td class="text-center">${element.idEnvio}-${element.codigo}</td>
     <td>${fechaLlegada}</td>
     <td>${fechaEntrega}</td>
-    <td>${element.detalle_envio}</td>
     <td>${element.observacion_llegada}</td>
     <td>${element.nombre_destino}</td>
     <td align="center">${element.ci_destino}</td>

@@ -8,26 +8,33 @@
           MENU INICIO
         </a> -->
         <div class="sb-sidenav-menu-heading">ACCIONES</div>
-        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#enviosCollapse" aria-expanded="false" aria-controls="enviosCollapse">
-          <div class="sb-nav-link-icon"><i class="fa-solid fa-share-from-square"></i></div> ENVIOS
-          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-        </a>
-        <div class="collapse" id="enviosCollapse" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-          <nav class="sb-sidenav-menu-nested nav">
-            <a class="nav-link" href="../envios/nuevo.php">Nuevo envio</a>
-            <a class="nav-link" href="../envios/">Lista envios</a>
-          </nav>
-        </div>
-        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#recepcionCollapse" aria-expanded="false" aria-controls="recepcionCollapse">
-          <div class="sb-nav-link-icon"><i class="fa fa-solid fa-dolly"></i></div> RECEPCIÓN
-          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-        </a>
-        <div class="collapse" id="recepcionCollapse" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-          <nav class="sb-sidenav-menu-nested nav">
-            <a class="nav-link" href="../recepcion/">Lista recepción</a>
-            <a class="nav-link" href="../recepcion/entregados.php">Entregados</a>
-          </nav>
-        </div>
+        <?php if ($user->rol != 'ALMACEN') : ?>
+          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#enviosCollapse" aria-expanded="false" aria-controls="enviosCollapse">
+            <div class="sb-nav-link-icon"><i class="fa-solid fa-share-from-square"></i></div> ENVIOS
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+          </a>
+          <div class="collapse" id="enviosCollapse" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+            <nav class="sb-sidenav-menu-nested nav">
+              <a class="nav-link" href="../envios/nuevo.php">Nuevo envio</a>
+              <a class="nav-link" href="../envios/">Lista envios</a>
+            </nav>
+          </div>
+          <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#recepcionCollapse" aria-expanded="false" aria-controls="recepcionCollapse">
+            <div class="sb-nav-link-icon"><i class="fa fa-solid fa-dolly"></i></div> RECEPCIÓN
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+          </a>
+          <div class="collapse" id="recepcionCollapse" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+            <nav class="sb-sidenav-menu-nested nav">
+              <a class="nav-link" href="../recepcion/">Lista recepción</a>
+              <a class="nav-link" href="../recepcion/entregados.php">Entregados</a>
+            </nav>
+          </div>
+        <?php else : ?>
+          <a class="nav-link" href="../recepcion/almacen.php" data-bs-target="#recepcionCollapse">
+            <div class="sb-nav-link-icon"><i class="fa fa-solid fa-dolly"></i></div>
+            Almacen
+          </a>
+        <?php endif; ?>
 
         <div class="sb-sidenav-menu-heading">OPCIONES</div>
         <?php if ($user->rol == 'ADMIN') : ?>

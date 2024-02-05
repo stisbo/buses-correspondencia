@@ -11,6 +11,7 @@ require_once('../app/models/envio.php');
 
 use App\Models\Envio;
 
+$envios = Envio::get_mis_envios($user->idUsuario);
 ?>
 
 <!DOCTYPE html>
@@ -52,7 +53,7 @@ use App\Models\Envio;
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table style="width:100%" class="table table-hover" id="table_ingresos">
+                  <table style="width:100%" class="table table-hover" id="tabla_mis_envios">
                     <thead>
                       <tr>
                         <th class="text-center">N° ID</th>
@@ -62,11 +63,40 @@ use App\Models\Envio;
                         <th class="text-center">Lugar Destino</th>
                         <th class="text-center">Fecha envio</th>
                         <th class="text-center">Estado</th>
-                        <th class="text-center">Opciones</th>
+                        <!-- <th class="text-center">Opciones</th> -->
                       </tr>
                     </thead>
-                    <tbody id="t_body_ingresos">
-
+                    <tbody id="t_body_envios">
+                      <?php foreach ($envios as $envio) :
+                        $clss = '';
+                        switch ($envio['estado']) {
+                          case 'ENVIADO':
+                            $clss = 'bg-warning';
+                            break;
+                          case 'RECIBIDO':
+                            $clss = 'bg-primary';
+                            break;
+                          case 'ENTREGADO':
+                            $clss = 'bg-success';
+                            break;
+                          default:
+                            $clss = '';
+                            break;
+                        }
+                      ?>
+                        <tr>
+                          <td class="text-center"><?= $envio['idEnvio'] ?></td>
+                          <td class="text-center"><?= $envio['idEnvio'] ?>-<?= $envio['codigo'] ?></td>
+                          <td class="text-center"><?= $envio['nombre_origen'] ?> | <?= $envio['ci_origen'] ?></td>
+                          <td class="text-center"><?= $envio['nombre_destino'] ?> | <?= $envio['ci_destino'] ?></td>
+                          <td class="text-center"><?= $envio['destino'] ?></td>
+                          <td class="text-center"><?= date('d/m/Y', strtotime($envio['fecha_envio'])) ?></td>
+                          <td class="text-center"><span class="badge <?= $clss ?>"><?= $envio['estado'] ?></span></td>
+                          <!-- <td class="text-center">
+                            <button class="btn btn-primary"></button>
+                          </td> -->
+                        </tr>
+                      <?php endforeach; ?>
                     </tbody>
                   </table>
                 </div>

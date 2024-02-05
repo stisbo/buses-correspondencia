@@ -24,6 +24,7 @@
               <select class="form-select" name="rol" id="rol_u_nuevo">
                 <option value="ADMIN">ADMIN</option>
                 <option value="VENTANILLA">VENTANILLA</option>
+                <option value="ALMACEN">ALMACEN</option>
               </select>
               <label for="rol_u_nuevo">Rol</label>
             </div>

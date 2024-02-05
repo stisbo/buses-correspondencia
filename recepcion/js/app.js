@@ -44,7 +44,6 @@ function generarTabla(data) {
     let opciones = `
       <div><button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modal_entregar_envio" data-codigo="${element.codigo}" data-id="${element.idEnvio}">Entregar</button></div>
     `;
-    // console.log(monto)
     html += `<tr>
     <td class="text-center">${element.idEnvio}</td>
     <td class="text-center">${element.idEnvio}-${element.codigo}</td>
@@ -98,6 +97,7 @@ async function cargarEntrega(e) {
     const estado = envio.estado == 'RECIBIDO' ? 'RECIBIDO' : 'PENDIENTE';
     const fechaRecibido = envio.fecha_llegada ? new Date(envio.fecha_llegada).toLocaleDateString() : 'S/F';
     html = `<div class="row fs-5">
+      <input type="hidden" id="id_envio_entrega" value="${envio.idEnvio}"> 
       <p class="fw-bold">DATOS ENVIO</p>
       <div class="col-lg-6"><b>Remitente:</b> ${envio.nombre_origen} CI: ${envio.ci_origen} CEL: ${envio.celular_origen ?? ''}</div>
       <div class="col-lg-6"><b>Envio: </b> ${envio.detalle_envio} desde ${envio.origen} en fecha: ${fechaEnvio.toLocaleDateString()}</div>
@@ -107,14 +107,9 @@ async function cargarEntrega(e) {
       <p class="fw-bold mb-0 mt-3">DETALLES ENTREGA</p>
       <div class="col-lg-6">
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="obs_entrega" value="" placeholder="Remitente" name="nombre_origen" autocomplete="off">
-          <label for="obs_entrega">Observación</label>
+          <input type="text" class="form-control" id="obs_entrega" value="" placeholder="Remitente" autocomplete="off">
+          <label for="obs_entrega">Observación (opcional)</label>
         </div>
-      </div>
-      <div class="col-lg-6">
-        Agregar comprobante 
-        <button class="btn btn-success">Imagen</button>
-        <button class="btn btn-primary">Firma</button>
       </div>
     </div>`;
     $("#body_modal_entregar_envio").html(html)
@@ -125,4 +120,22 @@ async function cargarEntrega(e) {
 }
 function limpiarEntrega(e) {
 
+}
+
+async function entregarEnvio() {
+  const idEnvio = $("#id_envio_entrega").val();
+  const obs = $("#obs_entrega").val();
+  console.log(idEnvio, obs)
+  const res = await $.ajax({
+    url: '../app/envio/registra_entrega',
+    data: { idEnvio, obs },
+    type: 'PUT',
+    dataType: 'json',
+  })
+  if (res.status == 'success') {
+    toast('Exito', res.message, 'success', 1900)
+    // window.open('../reports/pdfEntregado.php', '_blank');
+  } else {
+    toast('Error', res.message, 'error')
+  }
 }
