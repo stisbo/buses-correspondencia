@@ -2,8 +2,6 @@
 
 namespace App\Config;
 
-use App\Config\Database;
-
 class Accesos {
   public static function setAccesos($pin) { // seteamos las cookies para un nuevo ingreso login
     // Nos conectamos a la base de datos para obtener la base, permisos, etc
