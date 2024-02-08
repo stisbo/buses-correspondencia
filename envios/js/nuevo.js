@@ -1,45 +1,58 @@
 var formulario = false;
 var camaras = [];
-var capturas = 0;
+var capturas = {};
+var idCap = 0;
 $camaras_sel = $('#camaras_select');
 $(document).on('submit', '#form_nuevo', async (e) => {
   e.preventDefault();
 
   if (!formulario) {
-    formulario = true;
-    const data = $(e.target).serialize();
+    formulario = false;
+    const data = $(e.target).serializeArray();
     console.log(data);
+    const form = new FormData();
+    data.forEach(d => {
+      form.append(d.name, d.value)
+    })
+    let indice = 1;
+    for (const clave in capturas) {
+      form.append(`captura_${indice}`, capturas[clave]);
+      indice++;
+    }
     const res = await $.ajax({
       url: '../app/envio/create',
-      data,
+      data: form,
+      processData: false,
+      contentType: false,
       type: 'POST',
       dataType: 'json'
     });
-    // if (res.status == 'success') {
-    //   $.toast({
-    //     heading: '<b>PAGO AGREGADO</b>',
-    //     text: 'Se agregó el pago exitosamente',
-    //     icon: 'success',
-    //     position: 'top-right',
-    //     stack: 3,
-    //     hideAfter: 1500
-    //   });
-    //   const pago = JSON.parse(res.pago)
-    //   setTimeout(() => {
-    //     window.location.href = './';
-    //     window.open('../reports/pago.php?pagid=' + pago.idPago, 'blank');
-    //   }, 1500);
-    // } else {
-    //   formulario = false;
-    //   $.toast({
-    //     heading: '<b>OCURRIÓ UN ERROR</b>',
-    //     text: 'No se pudo agregar el pago',
-    //     icon: 'danger',
-    //     position: 'top-right',
-    //     stack: 2,
-    //     hideAfter: 2800
-    //   })
-    // }
+    if (res.status == 'success') {
+      $.toast({
+        heading: '<b>PAGO AGREGADO</b>',
+        text: 'Se agregó el pago exitosamente',
+        icon: 'success',
+        position: 'top-right',
+        stack: 3,
+        hideAfter: 1500
+      });
+      const envio = res.envio
+      console.log(envio)
+      setTimeout(() => {
+        // window.location.href = './';
+        // window.open('../reports/pdfEnvio.php?enid=' + envio.idEnvio, '_blank');
+      }, 1500);
+    } else {
+      formulario = false;
+      $.toast({
+        heading: '<b>OCURRIÓ UN ERROR</b>',
+        text: 'No se pudo agregar el pago',
+        icon: 'danger',
+        position: 'top-right',
+        stack: 2,
+        hideAfter: 2800
+      })
+    }
   }
 })
 
@@ -103,25 +116,35 @@ async function detenerStream() {
 }
 
 function capturar() {
-  if (capturas < 3) {
-    capturas++;
-    const data = capturarFoto();
-    const $foto = $(`<img src="${data}" class="img-fluid" />`);
-    $('#fotos').append($foto);
+  if (Object.keys(capturas).length < 3) {
+    capturarFoto();
   } else {
     toast('Limite', 'No puedes agregar más fotos', 'error', 2300)
   }
-  // const canvas = document.getElementById('canvas');
-  // const video = document.getElementById('video');
-  // canvas.width = video.videoWidth;
-  // canvas.height = video.videoHeight;
-  // canvas.getContext('2d').drawImage(video, 0, 0);
-  // const data = canvas.toDataURL('image/png');
-  // return data;
 }
-
+function capturarFoto() {
+  var canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth * 0.27; // 25% del ancho original
+  canvas.height = video.videoHeight * 0.27; // 25% de la altura original
+  var ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  idCap++;
+  capturas[idCap] = canvas.toDataURL('image/png');
+  $("#imgs_capturas").append(`
+    <div id="idCap-${idCap}" class="position-relative">
+      <img src="${canvas.toDataURL('image/png')}" class="img-fluid" />
+      <button type="button" class="btn btn-sm btn-danger position-absolute" style="bottom:5px; right:5px;" onclick="eliminarCaptura(${idCap})"><i class="fa fa-trash"></i></button>
+    </div>`)
+}
 $(document).on('change', '#fecha_envio', (e) => {
   const fecha = new Date(e.target.value);
   fecha.setDate(fecha.getDate() + 1);
   $("#fecha_estimada").val(fecha.toISOString().slice(0, 16).replace('T', ' '))
 })
+function eliminarCaptura(id) {
+  console.log('ELiminar', id)
+  capturas[id] = undefined;
+  if (delete capturas[id]) {
+    $("#idCap-" + id).remove();
+  }
+}

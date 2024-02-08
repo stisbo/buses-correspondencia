@@ -23,7 +23,12 @@ class EnvioController {
     $res = $envio->insert();
     if ($res > 0) {
       $envio->idEnvio = $res;
-      echo json_encode(['status' => 'success', 'mensaje' => 'Envio registrado exitosamente', 'envio' => $envio]);
+      $res = $envio->saveImages($data);
+      if ($res > 0) {
+        echo json_encode(['status' => 'success', 'mensaje' => 'Envio registrado exitosamente', 'envio' => $envio]);
+      } else {
+        echo json_encode(['status' => 'error', 'mensaje' => 'Error al registrar las imagenes del envio']);
+      }
     } else {
       echo json_encode(['status' => 'error', 'mensaje' => 'Error al registrar el envio']);
     }

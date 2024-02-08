@@ -23,7 +23,7 @@ class Accesos {
       session_write_close();
       setcookie('base', $empresa['base'], time() + 64800, '/', false);
       setcookie('permisos', json_encode($empresa['permisos']), time() + 64800, '/', false);
-      setcookie('_emp', json_encode(array('dominio'=>$empresa['dominio']), time() + 64800, '/', false));
+      setcookie('_emp', json_encode(array('dominio' => $empresa['dominio'])), time() + 64800, '/', false);
       return 1;
     } else { // no existe el PIN
       return -1;
@@ -54,7 +54,7 @@ class Accesos {
     }
     return $base;
   }
-  public static function dominio(){
+  public static function dominio() {
     if (isset($_COOKIE['dominio'])) {
       $domain = $_COOKIE['dominio'];
     } else if (isset($_SESSION['dominio'])) {

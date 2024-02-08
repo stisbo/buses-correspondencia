@@ -62,11 +62,13 @@ class Envio {
 
   public function insert() { // nuevo envio
     try {
+      $fechaenvio = date('Y-m-d\TH:i:s.v', strtotime($this->fecha_envio));
+      $fechaestimada = date('Y-m-d\TH:i:s.v', strtotime($this->fecha_estimada));
       $sql = "INSERT INTO tblEnvio(codigo, id_usuario_envio, estado, detalle_envio, fecha_envio, fecha_estimada, nombre_origen, ci_origen, celular_origen, id_lugar_origen, nombre_destino, ci_destino, id_lugar_destino, celular_destino)
       VALUES (:codigo, :idUsuarioEnvio, 'ENVIADO', :detalle_envio, :fecha_envio, :fecha_estimada, :nombre_origen, :ci_origen, :celular_origen, :id_lugar_origen, :nombre_destino, :ci_destino, :id_lugar_destino, :celular_destino);";
       $con = Database::getInstace();
       $stmt = $con->prepare($sql);
-      $params = ['codigo' => $this->codigo, 'idUsuarioEnvio' => $this->id_usuario_envio, 'detalle_envio' => $this->detalle_envio, 'fecha_envio' => $this->fecha_envio, 'fecha_estimada' => $this->fecha_estimada, 'nombre_origen' => $this->nombre_origen, 'ci_origen' => $this->ci_origen, 'celular_origen' => $this->celular_origen, 'id_lugar_origen' => $this->id_lugar_origen, 'nombre_destino' => $this->nombre_destino, 'ci_destino' => $this->ci_destino, 'id_lugar_destino' => $this->id_lugar_destino, 'celular_destino' => $this->celular_destino];
+      $params = ['codigo' => $this->codigo, 'idUsuarioEnvio' => $this->id_usuario_envio, 'detalle_envio' => $this->detalle_envio, 'fecha_envio' => $fechaenvio, 'fecha_estimada' => $fechaestimada, 'nombre_origen' => $this->nombre_origen, 'ci_origen' => $this->ci_origen, 'celular_origen' => $this->celular_origen, 'id_lugar_origen' => $this->id_lugar_origen, 'nombre_destino' => $this->nombre_destino, 'ci_destino' => $this->ci_destino, 'id_lugar_destino' => $this->id_lugar_destino, 'celular_destino' => $this->celular_destino];
       $res = $stmt->execute($params);
       if ($res) {
         $idEnvio = $con->lastInsertId();
@@ -85,7 +87,11 @@ class Envio {
       foreach ($this as $name => $value) {
         if ($this->$name != $anterior->$name) {
           $cadena .= "$name = :$name, ";
-          $params[$name] = $this->$name;
+          // sabemos si es fecha
+          if ($name == 'fecha_envio' || $name == 'fecha_estimada' || $name == 'fecha_llegada' || $name == 'fecha_entrega')
+            $params[$name] = date('Y-m-d\TH:i:s.v', strtotime($this->$name));
+          else
+            $params[$name] = $this->$name;
         }
       }
       if ($cadena != "") {
@@ -141,23 +147,40 @@ class Envio {
     return strtoupper(substr(uniqid(), -6));
   }
 
-  public function saveImages($files){
+  public function saveImages($files) {
     $dominio = Accesos::dominio();
-    if($dominio){
-      $carpeta = '../public/'.$dominio;
+    if ($dominio) {
+      $carpeta = '../public/' . $dominio;
       if (!is_dir($carpeta)) {
         mkdir($carpeta, 0777, true);
       }
-      for($i = 1; $i <=3; $i++){// solo se aceptan 3 capturas
-        if(isset($files['file_'.$i])){
-          $nombre = 'captura_'.$this->idEnvio.$this->codigo.'_'.$i.'.jpg';
-          if(!is_dir($carpeta.'/capturas')){
-            mkdir($carpeta.'/capturas', 0777, true);
+      $cadNombreCaps = '';
+      for ($i = 1; $i <= 3; $i++) { // solo se aceptan 3 capturas
+        if (isset($files['captura_' . $i])) {
+          print_r($files['captura_' . $i]);
+          $nombre = 'captura_' . $this->idEnvio . $this->codigo . '_' . $i . '.png';
+          if (!is_dir($carpeta . '/capturas')) {
+            mkdir($carpeta . '/capturas', 0777, true);
           }
-          // guardar imagen
+          // guardar imagen de base64
+
+          move_uploaded_file($files['captura_' . $i]['tmp_name'], $carpeta . '/capturas/' . $nombre);
+          // guardar nombre de imagen
+          $cadNombreCaps .= $nombre . '|';
         }
       }
-    }else{ // no existe sesion
+      if ($cadNombreCaps != '') {
+        $cadNombreCaps = substr($cadNombreCaps, 0, -1);
+        $clon = clone $this;
+        $this->capturas = $cadNombreCaps;
+        if ($this->update($clon)) {
+          return 1;
+        }
+        return -1;
+      } else {
+        return 1;
+      }
+    } else { // no existe sesion
       return -1;
     }
   }
