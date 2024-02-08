@@ -119,3 +119,9 @@ function capturar() {
   // const data = canvas.toDataURL('image/png');
   // return data;
 }
+
+$(document).on('change', '#fecha_envio', (e) => {
+  const fecha = new Date(e.target.value);
+  fecha.setDate(fecha.getDate() + 1);
+  $("#fecha_estimada").val(fecha.toISOString().slice(0, 16).replace('T', ' '))
+})

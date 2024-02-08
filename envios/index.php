@@ -113,7 +113,7 @@ $envios = Envio::get_mis_envios($user->idUsuario);
   <script src="../js/scripts.js"></script>
   <script src="../assets/datatables/datatables.jquery.min.js"></script>
   <script src="../assets/datatables/datatables.bootstrap5.min.js"></script>
-  <script src="./js/app.js"></script>
+  <!-- <script src="./js/app.js"></script> -->
 </body>
 
 </html>

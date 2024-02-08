@@ -3,17 +3,9 @@
 namespace App\Models;
 
 use App\Config\Database;
-
+use App\Config\Accesos;
 
 class Envio {
-  private static
-    $sql_envio = "SELECT  
-	  (SELECT lugar FROM tblLugar WHERE idLugar = e.id_lugar_origen) as origen,
-	  (SELECT lugar FROM tblLugar WHERE idLugar = e.id_lugar_destino) as destino,
-	  (SELECT nombre FROM tblUsuario WHERE idUsuario = e.id_usuario_envio) as usuario_envio,
-	  e.*
-  FROM tblEnvio e
-  WHERE e.estado = 'ENVIADO'";
   private static
     $sql = "SELECT  
 	  (SELECT lugar FROM tblLugar WHERE idLugar = e.id_lugar_origen) as origen,
@@ -48,6 +40,7 @@ class Envio {
   public string $celular_destino;
   public string $destino;
   public string $fecha_entrega;
+  public string $capturas; // nombres de las imagenes separados por |
 
   public function __construct($idEnvio = 0) {
     if ($idEnvio == 0) {
@@ -135,6 +128,7 @@ class Envio {
     $this->destino = "";
     $this->fecha_entrega = "";
     $this->id_usuario_entrega = 0;
+    $this->capturas = '';
   }
   public function load($row) {
     foreach ($this as $nombre => $valor) {
@@ -145,6 +139,27 @@ class Envio {
   }
   public function genCode() {
     return strtoupper(substr(uniqid(), -6));
+  }
+
+  public function saveImages($files){
+    $dominio = Accesos::dominio();
+    if($dominio){
+      $carpeta = '../public/'.$dominio;
+      if (!is_dir($carpeta)) {
+        mkdir($carpeta, 0777, true);
+      }
+      for($i = 1; $i <=3; $i++){// solo se aceptan 3 capturas
+        if(isset($files['file_'.$i])){
+          $nombre = 'captura_'.$this->idEnvio.$this->codigo.'_'.$i.'.jpg';
+          if(!is_dir($carpeta.'/capturas')){
+            mkdir($carpeta.'/capturas', 0777, true);
+          }
+          // guardar imagen
+        }
+      }
+    }else{ // no existe sesion
+      return -1;
+    }
   }
 
   public static function getRecibir($idDestino, $estado = null) {

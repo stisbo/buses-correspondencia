@@ -68,7 +68,7 @@ $lugares = Lugar::all();
 											</div>
 											<div class="col-md-4">
 												<div class="form-floating mb-3">
-													<input type="date" class="form-control" placeholder="Fecha envio" name="fecha_envio" required value="<?= date('Y-m-d') ?>">
+													<input type="date" class="form-control" placeholder="Fecha envio" name="fecha_envio" id="fecha_envio" required value="<?= date('Y-m-d') ?>">
 													<label for="">Fecha envio</label>
 												</div>
 											</div>
@@ -112,7 +112,7 @@ $lugares = Lugar::all();
 											</div>
 											<div class="col-md-4">
 												<div class="form-floating mb-3">
-													<input type="datetime-local" class="form-control" placeholder="Fecha llegada" name="fecha_estimada" required value="">
+													<input id="fecha_estimada" type="datetime-local" class="form-control" placeholder="Fecha llegada" name="fecha_estimada" required value="<?=date('Y-m-d H:i', (time() + 24*3600))?>">
 													<label for="">Fecha - hora llegada (estimado)</label>
 												</div>
 											</div>
@@ -166,7 +166,7 @@ $lugares = Lugar::all();
 	<script src="../js/scripts.js"></script>
 	<script src="../assets/datatables/datatables.jquery.min.js"></script>
 	<script src="../assets/datatables/datatables.bootstrap5.min.js"></script>
-	<script src="./js/app.js"></script>
+	<script src="./js/nuevo.js"></script>
 </body>
 
 </html>
