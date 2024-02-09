@@ -41,10 +41,12 @@ function generarTabla(data) {
     let opciones = `
       <div><button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modal_entregar_envio" data-codigo="${element.codigo}" data-id="${element.idEnvio}">Entregar</button></div>
     `;
-    // console.log(monto)
+    let codigo = (element.capturas != '' && element.capturas != null) ?
+      `<button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modal_ver_capturas' data-id="${element.idEnvio}">${element.idEnvio}-${element.codigo}</button>
+    </div>`: `${element.idEnvio}-${element.codigo}`;
     html += `<tr id="row-tb-${element.idEnvio}">
     <td class="text-center">${element.idEnvio}</td>
-    <td class="text-center">${element.idEnvio}-${element.codigo}</td>
+    <td class="text-center">${codigo}</td>
     <td>${fechaEnvio.toLocaleDateString()}</td>
     <td>${element.detalle_envio}</td>
     <td align="center">${element.nombre_origen}-${element.ci_origen}</td>
@@ -73,4 +75,12 @@ $(document).on('change', '.check-llegada', async (e) => {
   } else {
     toast("Error al marcar como recibido", "Error", "error", time = 2500)
   }
+})
+$(document).on('show.bs.modal', '#modal_ver_capturas', async (e) => {
+  const id = e.relatedTarget.dataset.id
+  console.log(id)
+  await $("#body_capturas").load('../app/envio/obtenercapturas', { idEnvio: id })
+})
+$(document).on('hide.bs.modal', '#modal_ver_capturas', () => {
+  $("#body_capturas").html('')
 })

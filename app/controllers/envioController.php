@@ -71,7 +71,7 @@ class EnvioController {
       $anterior = clone $envio;
       if ($envio->idEnvio) {
         $envio->estado = "RECIBIDO";
-        $envio->fecha_llegada = date('Y-d-m H:i:s');
+        $envio->fecha_llegada = date('Y-m-d H:i:s');
         $envio->id_usuario_recibe = $user->idUsuario;
         $res = $envio->update($anterior);
         if ($res > 0) {
@@ -108,5 +108,73 @@ class EnvioController {
     } else {
       echo json_encode(['status' => 'error', 'message' => 'Necesario datos id de envio']);
     }
+  }
+  public function obtenercapturas($data) {
+    $html = '';
+    if (isset($data['idEnvio'])) {
+      $envio = new Envio($data['idEnvio']);
+      if ($envio->idEnvio) {
+        $caps = $envio->capturas ?? '';
+        if ($caps != '') {
+          $arrCaps = explode('|', $caps);
+          $html = '
+          <div id="carrusel_caps" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">';
+          $htmlInidicators = '';
+          $htmlItems = '';
+          $count = 0;
+          foreach ($arrCaps as $cap) {
+            $rutaCompleta = $envio->existeImagen($cap);
+            if ($rutaCompleta != '') {
+              $htmlInidicators .= $count == 0 ?
+                '<button type="button" data-bs-target="#carrusel_caps" data-bs-slide-to="' . $count . '" class="active" aria-current="true" aria-label="Slide ' . ($count + 1) . '"></button>' :
+                '<button type="button" data-bs-target="#carrusel_caps" data-bs-slide-to="' . $count . '" aria-label="Slide ' . ($count + 1) . '"></button>';
+              $htmlItems .= $count == 0 ?
+                '<div class="carousel-item active">
+                  <img src="' . $rutaCompleta . '" class="d-block w-100" alt="Captura envio ' . ($count + 1) . '">
+                </div>' :
+                '<div class="carousel-item active">
+                  <img src="' . $rutaCompleta . '" class="d-block w-100" alt="Captura envio ' . ($count + 1) . '">
+                </div>';
+              $count++;
+            }
+          }
+          $html .= $htmlInidicators .
+            '</div>
+            <div class="carousel-inner">' . $htmlItems . '</div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carrusel_caps" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Ant.</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carrusel_caps" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Sig.</span>
+            </button>
+          </div>';
+          if ($count == 0) { // no existen las imagenes en servidor pero si en la BD
+            $html = '<div class="alert alert-danger" role="alert">
+              <h4 class="alert-heading">No hay capturas</h4>
+              <p>Las capturas no existen en el servidor</p>
+            </div>';
+          }
+        } else {
+          $html = '<div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">No hay capturas</h4>
+            <p>Al parecer el envio no tiene capturas.</p>
+          </div>';
+        }
+      } else {
+        $html = '<div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Ocurrió un error</h4>
+            <p>Al parecer el envio no existe, vuelva a intentarlo.</p>
+          </div>';
+      }
+    } else {
+      $html = '<div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Ocurrió un error (No ID envio)</h4>
+            <p>Al parecer el envio no existe, vuelva a intentarlo.</p>
+          </div>';
+    }
+    echo $html;
   }
 }

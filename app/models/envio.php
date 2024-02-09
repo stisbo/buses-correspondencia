@@ -162,10 +162,10 @@ class Envio {
             mkdir($carpeta . '/capturas', 0777, true);
           }
           // guardar imagen de base64
-          list($tipo, $data) = explode(';', $files['captura_'.$i]);
+          list($tipo, $data) = explode(';', $files['captura_' . $i]);
           list(, $data) = explode(',', $data);
           $image_data = base64_decode($data);
-          file_put_contents($carpeta.'/capturas/'. $nombre , $image_data);
+          file_put_contents($carpeta . '/capturas/' . $nombre, $image_data);
           // concatenamos nombre del archivo
           $cadNombreCaps .= $nombre . '|';
         }
@@ -183,6 +183,20 @@ class Envio {
       }
     } else { // no existe sesion
       return -1;
+    }
+  }
+
+  public function existeImagen($nombre_img) {
+    $dominio = Accesos::dominio();
+    if ($dominio) {
+      $carpeta = '../public/' . $dominio;
+      if (file_exists($carpeta . '/capturas/' . $nombre_img)) {
+        return $carpeta . '/capturas/' . $nombre_img;
+      } else {
+        return '';
+      }
+    } else { // no existe sesion
+      return '';
     }
   }
 

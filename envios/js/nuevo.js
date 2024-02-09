@@ -124,15 +124,15 @@ function capturar() {
 }
 function capturarFoto() {
   var canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth * 0.27; // 25% del ancho original
-  canvas.height = video.videoHeight * 0.27; // 25% de la altura original
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
   var ctx = canvas.getContext('2d');
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   idCap++;
   capturas[idCap] = canvas.toDataURL('image/png');
   $("#imgs_capturas").append(`
     <div id="idCap-${idCap}" class="position-relative">
-      <img src="${canvas.toDataURL('image/png')}" class="img-fluid" />
+      <img width="${canvas.width * 0.25}" height="${canvas.height * 0.25}" src="${canvas.toDataURL('image/png')}" class="img-fluid" />
       <button type="button" class="btn btn-sm btn-danger position-absolute" style="bottom:5px; right:5px;" onclick="eliminarCaptura(${idCap})"><i class="fa fa-trash"></i></button>
     </div>`)
 }

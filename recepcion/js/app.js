@@ -44,9 +44,12 @@ function generarTabla(data) {
     let opciones = `
       <div><button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modal_entregar_envio" data-codigo="${element.codigo}" data-id="${element.idEnvio}">Entregar</button></div>
     `;
+    let codigo = (element.capturas != '' && element.capturas != null) ?
+      `<button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modal_ver_capturas' data-id="${element.idEnvio}">${element.idEnvio}-${element.codigo}</button>
+    </div>`: `${element.idEnvio}-${element.codigo}`;
     html += `<tr>
     <td class="text-center">${element.idEnvio}</td>
-    <td class="text-center">${element.idEnvio}-${element.codigo}</td>
+    <td class="text-center">${codigo}</td>
     <td>${fechaEnvio.toLocaleDateString()}</td>
     <td class="text-center"><span class="badge ${clsEstado}">${estado}</span></td>
     <td>${element.detalle_envio}</td>
@@ -80,7 +83,7 @@ $(document).on('click', '.filter-btns', async (e) => {
 });
 
 $(document).on('show.bs.modal', '#modal_entregar_envio', cargarEntrega);
-$(document).on('hide.bs.modal', '#modal_entregar_envio', limpiarEntrega);
+// $(document).on('hide.bs.modal', '#modal_entregar_envio', );
 async function cargarEntrega(e) {
   const codigo = e.relatedTarget.dataset.codigo;
   const id = e.relatedTarget.dataset.id;
@@ -131,7 +134,7 @@ async function entregarEnvio() {
   })
   if (res.status == 'success') {
     toast('Exito', res.message, 'success', 1700)
-    window.open('../reports/pdfEntrega.php?enid='+idEnvio, '_blank');
+    window.open('../reports/pdfEntrega.php?enid=' + idEnvio, '_blank');
     setTimeout(() => {
       location.reload();
     }, 1800);
@@ -139,3 +142,13 @@ async function entregarEnvio() {
     toast('Error', res.message, 'error')
   }
 }
+
+
+$(document).on('show.bs.modal', '#modal_ver_capturas', async (e) => {
+  const id = e.relatedTarget.dataset.id
+  console.log(id)
+  await $("#body_capturas").load('../app/envio/obtenercapturas', { idEnvio: id })
+})
+$(document).on('hide.bs.modal', '#modal_ver_capturas', () => {
+  $("#body_capturas").html('')
+})

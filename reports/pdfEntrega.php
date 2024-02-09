@@ -20,7 +20,7 @@ if (!isset($_GET['enid'])) {
   }
 
   $width = 217;
-  $height = 320;
+  $height = 340;
 
   // Calculamos alto de pagina (unicamente por el campo detalle_envio) Es el unico que puede ser mas grande
   $tam_fuente = 8;
@@ -48,7 +48,7 @@ if (!isset($_GET['enid'])) {
   $pdf->SetFont('Helvetica', '', $tam_fuente);
   $pdf->addPage();
 
-  $content = '<h2 style="text-align:center;">NOTA DE ENTRREGA</h2>';
+  $content = '<h2 style="text-align:center;">NOTA DE ENTREGA</h2>';
   $pdf->writeHTML($content, true, 0, true, 0);
 
   $tabla = '<table border="0" cellpadding="0">
@@ -78,7 +78,7 @@ if (!isset($_GET['enid'])) {
             <tr><td colspan="500" align="left"><b>Lugar destino: </b>' . $envio->destino . '</td></tr>
             <tr><td colspan="500" align="left"><b>Celular: </b>' . $envio->celular_destino . '</td></tr>
             <tr><td colspan="500" align="left"><b>Fecha de entrega: </b>' . $fechaEntrega . '</td></tr>
-            <tr><td colspan="500"><b>Obs.:</b> '.$envio->observacion_llegada.'</td></tr>
+            <tr><td colspan="500"><b>Obs.:</b> ' . $envio->observacion_llegada . '</td></tr>
             <tr><td colspan="500" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td></tr></table>';
 
   $tabla .= '<table border="0" cellpadding="0"><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr>';

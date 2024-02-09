@@ -83,10 +83,12 @@ $envios = Envio::get_mis_envios($user->idUsuario);
                             $clss = '';
                             break;
                         }
+                        $imagenes = $envio['capturas'] ?? '';
+                        $codigo = $imagenes != '' ? "<button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modal_ver_capturas' data-id='" . $envio['idEnvio'] . "'>" . $envio['idEnvio'] . '-' . $envio['codigo'] . "</button>" : $envio['idEnvio'] . '-' . $envio['codigo'];
                       ?>
                         <tr>
                           <td class="text-center"><?= $envio['idEnvio'] ?></td>
-                          <td class="text-center"><?= $envio['idEnvio'] ?>-<?= $envio['codigo'] ?></td>
+                          <td class="text-center"><?= $codigo ?></td>
                           <td class="text-center"><?= $envio['nombre_origen'] ?> | <?= $envio['ci_origen'] ?></td>
                           <td class="text-center"><?= $envio['nombre_destino'] ?> | <?= $envio['ci_destino'] ?></td>
                           <td class="text-center"><?= $envio['destino'] ?></td>
@@ -113,7 +115,7 @@ $envios = Envio::get_mis_envios($user->idUsuario);
   <script src="../js/scripts.js"></script>
   <script src="../assets/datatables/datatables.jquery.min.js"></script>
   <script src="../assets/datatables/datatables.bootstrap5.min.js"></script>
-  <!-- <script src="./js/app.js"></script> -->
+  <script src="./js/app.js"></script>
 </body>
 
 </html>

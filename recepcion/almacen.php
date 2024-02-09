@@ -62,7 +62,7 @@ if (isset($_COOKIE['user_obj'])) {
       </main>
     </div>
   </div><!-- fin contenedor -->
-
+  <?php include('modals.php'); ?>
   <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../js/scripts.js"></script>
   <script src="../assets/datatables/datatables.jquery.min.js"></script>
