@@ -157,15 +157,16 @@ class Envio {
       $cadNombreCaps = '';
       for ($i = 1; $i <= 3; $i++) { // solo se aceptan 3 capturas
         if (isset($files['captura_' . $i])) {
-          print_r($files['captura_' . $i]);
           $nombre = 'captura_' . $this->idEnvio . $this->codigo . '_' . $i . '.png';
           if (!is_dir($carpeta . '/capturas')) {
             mkdir($carpeta . '/capturas', 0777, true);
           }
           // guardar imagen de base64
-
-          move_uploaded_file($files['captura_' . $i]['tmp_name'], $carpeta . '/capturas/' . $nombre);
-          // guardar nombre de imagen
+          list($tipo, $data) = explode(';', $files['captura_'.$i]);
+          list(, $data) = explode(',', $data);
+          $image_data = base64_decode($data);
+          file_put_contents($carpeta.'/capturas/'. $nombre , $image_data);
+          // concatenamos nombre del archivo
           $cadNombreCaps .= $nombre . '|';
         }
       }

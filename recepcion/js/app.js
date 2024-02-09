@@ -118,9 +118,6 @@ async function cargarEntrega(e) {
     toast('Ocurrió un error', res.message, 'error')
   }
 }
-function limpiarEntrega(e) {
-
-}
 
 async function entregarEnvio() {
   const idEnvio = $("#id_envio_entrega").val();
@@ -133,8 +130,11 @@ async function entregarEnvio() {
     dataType: 'json',
   })
   if (res.status == 'success') {
-    toast('Exito', res.message, 'success', 1900)
-    // window.open('../reports/pdfEntregado.php', '_blank');
+    toast('Exito', res.message, 'success', 1700)
+    window.open('../reports/pdfEntrega.php?enid='+idEnvio, '_blank');
+    setTimeout(() => {
+      location.reload();
+    }, 1800);
   } else {
     toast('Error', res.message, 'error')
   }

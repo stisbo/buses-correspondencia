@@ -58,17 +58,39 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="form_user_edit" onsubmit="return false;">
-          <input type="hidden" name="idUsuario" id="id_usuario_edit">
+        <form id="form_edit_user">
+          <input type="hidden" name="idUsuario" value="" id="id_usuario_edit">
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="user_alias_edit" placeholder="usuario" value="" name="usuario">
-            <label for="user_alias">Usuario </label>
+            <input type="text" class="form-control" id="nombre_u_edit" placeholder="Nombre" value="" name="nombre">
+            <label for="nombre_u_edit">Nombre</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="user_u_edit" placeholder="usuario" value="" name="usuario">
+            <label for="user_u_edit">Usuario</label>
           </div>
           <div class="mb-2">
-            <select class="form-select" name="rol" id="user_rol_edit"></select>
+            <div class="form-floating mb-3">
+              <select class="form-select" name="rol" id="rol_u_edit">
+                <option value="ADMIN">ADMIN</option>
+                <option value="VENTANILLA">VENTANILLA</option>
+                <option value="ALMACEN">ALMACEN</option>
+              </select>
+              <label for="rol_u_edit">Rol</label>
+            </div>
+          </div>
+          <div class="mb-2">
+            <div class="form-floating mb-3">
+              <select class="form-select" name="idLugar" id="lugar_user_edit">
+                <?php foreach ($lugares as $lugar) : ?>
+                  <option value="<?= $lugar['idLugar'] ?>"><?= $lugar['lugar'] ?></option>
+                <?php endforeach; ?>
+              </select>
+              <label for="lugar_user_edit">Lugar Asignado</label>
+            </div>
           </div>
         </form>
       </div>
+  
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="updateUser()">Guardar</button>

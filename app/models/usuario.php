@@ -35,6 +35,7 @@ class Usuario {
     $this->usuario = '';
     $this->rol = '';
     $this->idLugar = 0;
+    $this->password = '';
     $this->lugar = '';
     $this->color = '#212529';
   }
@@ -93,6 +94,7 @@ class Usuario {
     $this->usuario = $row['usuario'];
     $this->rol = $row['rol'];
     $this->color = $row['color'];
+    $this->password = $row['password'];
     $this->idLugar = $row['idLugar'];
     $this->lugar = $row['lugar'];
   }

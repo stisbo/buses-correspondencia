@@ -124,7 +124,6 @@ class UsuarioController {
       $usuario->rol = $rol;
       $usuario->nombre = $data['nombre'];
       $usuario->idLugar = $data['idLugar'];
-      $usuario->color = $data['color'];
       $res = $usuario->save();
       if ($res > 0) {
         echo json_encode(array('status' => 'success', 'message' => 'El usuario fue actualizado exitosamente'));

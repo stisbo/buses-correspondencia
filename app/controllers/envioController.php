@@ -93,7 +93,7 @@ class EnvioController {
       $anterior = clone $envio;
       if ($envio->idEnvio) {
         $envio->estado = "ENTREGADO";
-        $envio->fecha_entrega = date('Y-d-m H:i:s');
+        $envio->fecha_entrega = date('Y-m-d H:i:s');
         $envio->id_usuario_entrega = $user->idUsuario;
         $envio->observacion_llegada = $data['obs'];
         $res = $envio->update($anterior);

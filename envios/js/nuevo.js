@@ -39,8 +39,8 @@ $(document).on('submit', '#form_nuevo', async (e) => {
       const envio = res.envio
       console.log(envio)
       setTimeout(() => {
-        // window.location.href = './';
-        // window.open('../reports/pdfEnvio.php?enid=' + envio.idEnvio, '_blank');
+        window.open('../reports/pdfEnvio.php?enid=' + envio.idEnvio, 'blank');
+        window.location.href = './';
       }, 1500);
     } else {
       formulario = false;

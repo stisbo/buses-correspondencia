@@ -96,7 +96,7 @@ const cambiarPass = async () => {
     console.log(data)
     const res = await $.ajax({
       data,
-      url: "../app/cusuario/changepass",
+      url: "../app/usuario/changepass",
       type: "POST",
       dataType: "JSON",
     })

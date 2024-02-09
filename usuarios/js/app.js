@@ -51,7 +51,7 @@ async function listarUsuarios() {
         <td>
           <div class="d-flex justify-content-around">
             <div>
-              <button class="btn btn-primary rounded-circle" type="button" data-bs-toggle="modal" data-bs-target="#modal_usuario_edit" data-alias="${item.alias}" data-rol="${item.rol}" data-id="${item.idUsuario}"><i class="fa fa-pencil"></i></button>
+              <button class="btn btn-primary rounded-circle" type="button" data-bs-toggle="modal" data-bs-target="#modal_usuario_edit" data-usuario="${item.usuario}" data-rol="${item.rol}" data-nombre="${item.nombre}" data-id="${item.idUsuario}" data-idlugar=${item.idLugar}><i class="fa fa-pencil"></i></button>
             </div>
             <div>
               <button class="btn btn-secondary rounded-circle" title="Restablecer contraseña" type="button" data-bs-toggle="modal" data-bs-target="#modal_reset_pass" data-id="${item.idUsuario}"><i class="fa fa-lock"></i></button>
@@ -73,28 +73,39 @@ async function listarUsuarios() {
 }
 
 $(document).on('show.bs.modal', '#modal_usuario_edit', (e) => {
-  const alias = $(e.relatedTarget).data('alias');
+  const usuario = $(e.relatedTarget).data('usuario');
+  const nombre = $(e.relatedTarget).data('nombre');
   const rol = $(e.relatedTarget).data('rol');
   const id = $(e.relatedTarget).data('id');
-  $("#user_alias_edit").val(alias);
+  const idlugar = $(e.relatedTarget).data('idlugar');
+  $("#user_u_edit").val(usuario);
+  $("#nombre_u_edit").val(nombre.toUpperCase());
   $("#id_usuario_edit").val(id);
-  $("#user_rol_edit").html(`
-    <option value="VISOR" ${rol == 'VISOR' ? 'selected' : ''}>VISOR</option>
-    <option value="EDITOR" ${rol == 'EDITOR' ? 'selected' : ''}>EDITOR</option>
-  `);
+  $('#rol_u_edit option').each(function(_, element) {
+    if($(element).val() == rol){
+      $(element).attr('selected', true);
+    }
+  });
+  $("#lugar_user_edit option").each((_,e) => {
+    if($(e).val() == idlugar){
+      $(e).attr('selected', true)
+    }
+  })
 });
 $(document).on('hide.bs.modal', '#modal_usuario_edit', () => {
   setTimeout(() => {
-    $("#user_alias_edit").val('');
+    $("#user_u_edit").val('');
     $("#id_usuario_edit").val('');
-    $("#user_rol_edit").html(``);
+    $("#nombre_u_edit").html(``);
+    $("#lugar_user_edit option").attr('selected', false)
+    $("#rol_u_edit option").attr('selected', false)
   }, 900);
 });
 
 async function updateUser() {
-  const data = $("#form_user_edit").serialize();
+  const data = $("#form_edit_user").serialize();
   const res = await $.ajax({
-    url: '../app/cusuario/update',
+    url: '../app/usuario/update',
     data,
     type: 'PUT',
     dataType: 'JSON'
