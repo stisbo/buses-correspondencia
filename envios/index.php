@@ -63,7 +63,7 @@ $envios = Envio::get_mis_envios($user->idUsuario);
                         <th class="text-center">Lugar Destino</th>
                         <th class="text-center">Fecha envio</th>
                         <th class="text-center">Estado</th>
-                        <!-- <th class="text-center">Opciones</th> -->
+                        <th class="text-center"><i class="fa fa-solid fa-print"></i></th>
                       </tr>
                     </thead>
                     <tbody id="t_body_envios">
@@ -94,9 +94,9 @@ $envios = Envio::get_mis_envios($user->idUsuario);
                           <td class="text-center"><?= $envio['destino'] ?></td>
                           <td class="text-center"><?= date('d/m/Y', strtotime($envio['fecha_envio'])) ?></td>
                           <td class="text-center"><span class="badge <?= $clss ?>"><?= $envio['estado'] ?></span></td>
-                          <!-- <td class="text-center">
-                            <button class="btn btn-primary"></button>
-                          </td> -->
+                          <td class="text-center">
+                            <a href="../reports/pdfEnvio.php?enid=<?= $envio['idEnvio'] ?>" target="_blank" class="btn btn-secondary"><i class="fa fa-solid fa-print"></i></a>
+                          </td>
                         </tr>
                       <?php endforeach; ?>
                     </tbody>

@@ -20,7 +20,7 @@ if (!isset($_GET['enid'])) {
   }
 
   $width = 217;
-  $height = 320;
+  $height = 330;
 
   // Calculamos alto de pagina (unicamente por el campo detalle_envio) Es el unico que puede ser mas grande
   $tam_fuente = 8;
@@ -45,7 +45,7 @@ if (!isset($_GET['enid'])) {
 
   $content = '<h2 style="text-align:center;">NOTA DE ENVIO</h2>';
   $pdf->writeHTML($content, true, 0, true, 0);
-
+  $costo = $envio->costo ?? '0.00';
   $tabla = '<table border="0" cellpadding="0">
   <tr><td colspan="500" align="center"><b>' . $subdominio . '</b></td></tr>
             <tr><td colspan="500" align="center">' . $nombre_suc . '</td></tr>
@@ -63,6 +63,7 @@ if (!isset($_GET['enid'])) {
             <tr><td colspan="500" align="left"><b>Celular: </b>' . $envio->celular_origen . '</td></tr>
             <tr><td colspan="500" align="left"><b>Fecha - hora envio: </b>' . date('d/m/Y H:i:s', strtotime($envio->fecha_envio)) . '</td></tr>
             <tr><td colspan="500"><b>Detalles: </b>' . $envio->detalle_envio . '</td></tr>
+            <tr><td colspan="500" align="left"><b>Costo de envio: </b> Bs. ' . $costo . '</td></tr>
             <tr><td colspan="500" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td></tr></table>';
   $fechaEstimada = ($envio->fecha_estimada != null && $envio->fecha_estimada != '') ? date('d/m/Y', strtotime($envio->fecha_estimada)) : 'S/F';
   $tabla .= '<table border="0" cellpadding="0">

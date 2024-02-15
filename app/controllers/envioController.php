@@ -14,12 +14,13 @@ class EnvioController {
     $envio->ci_origen = $data['ci_origen'];
     $envio->celular_origen = $data['celular_origen'];
     $envio->id_lugar_origen = $data['origen'];
-    $envio->fecha_envio = $data['fecha_envio'];
+    $envio->fecha_envio = $data['fecha_envio'] . 'T' . date('H:i');
     $envio->fecha_estimada = str_replace('T', ' ', $data['fecha_estimada']);
     $envio->nombre_destino = $data['nombre_destino'];
     $envio->ci_destino = $data['ci_destino'];
     $envio->celular_destino = $data['celular_destino'];
     $envio->id_lugar_destino = $data['destino'];
+    $envio->costo = $data['costo'];
     $res = $envio->insert();
     if ($res > 0) {
       $envio->idEnvio = $res;

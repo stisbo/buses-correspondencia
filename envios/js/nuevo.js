@@ -3,12 +3,10 @@ var camaras = [];
 var capturas = {};
 var idCap = 0;
 $camaras_sel = $('#camaras_select');
-$(document).on('submit', '#form_nuevo', async (e) => {
-  e.preventDefault();
-
+async function enviarForm(e) {
   if (!formulario) {
     formulario = false;
-    const data = $(e.target).serializeArray();
+    const data = $(e).serializeArray();
     console.log(data);
     const form = new FormData();
     data.forEach(d => {
@@ -54,8 +52,20 @@ $(document).on('submit', '#form_nuevo', async (e) => {
       })
     }
   }
-})
+};
 
+$("#form_nuevo").validationEngine({
+  promptPosition: "topLeft",
+  scroll: false,
+  focusFirstField: false,
+  onValidationComplete: function (form, status) {
+    console.log('enviar', form, status)
+    if (status)
+      enviarForm(form)
+    else
+      toast('Formulario inválido', 'Verifique los campos', 'error', 2600)
+  }
+});
 const tieneSoporteUserMedia = () =>
   !!(navigator.getUserMedia || (navigator.mozGetUserMedia || navigator.mediaDevices.getUserMedia) || navigator.webkitGetUserMedia || navigator.msGetUserMedia)
 
@@ -68,11 +78,13 @@ const obtenerDispositivos = () => navigator
 
 $(document).on('click', '#btn_agregar_fotos', async () => {
   $camaras_sel.html('')
+  $('#btn_submit_form').hide();
+  $("#btn_volver_page").hide();
   if (tieneSoporteUserMedia()) {
     let dispositivos = await obtenerDispositivos();
     camaras = dispositivos.filter(d => d.kind === 'videoinput');
     if (camaras.length > 0) {
-      llenarCamaras()
+      await llenarCamaras()
       streamCamara(camaras[0].deviceId)
     } else {
       toast('Sin camara', 'No se encontró ningún dispositivo', 'error', 2300)
@@ -82,7 +94,7 @@ $(document).on('click', '#btn_agregar_fotos', async () => {
   }
 })
 
-function llenarCamaras() {
+async function llenarCamaras() {
   camaras.forEach(c => {
     $camaras_sel.append(`<option value="${c.deviceId}">${c.label}</option>`)
   })
@@ -106,6 +118,11 @@ async function streamCamara(id) {
     console.log(error);
   })
   return stream;
+}
+function volverForm() {
+  detenerStream();
+  $('#btn_submit_form').show();
+  $("#btn_volver_page").show();
 }
 async function detenerStream() {
   const stream = document.getElementById('video').srcObject;

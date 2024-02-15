@@ -26,10 +26,10 @@ $lugares = Lugar::all();
   <link href="../css/styles.css" rel="stylesheet" />
   <link rel="stylesheet" href="../assets/jquery/jqueryToast.min.css">
   <link rel="stylesheet" href="../css/custom.css">
+  <link rel="stylesheet" href="../assets/jquery/jqueryValidationEngine.css">
   <script src="../assets/fontawesome/fontawesome6.min.js"></script>
   <script src="../assets/jquery/jquery.js"></script>
   <script src="../assets/jquery/jqueryToast.min.js"></script>
-  <script src="../assets/sweetalert2/sweetalert2.all.min.js"></script>
 </head>
 
 <body>
@@ -44,7 +44,7 @@ $lugares = Lugar::all();
             <h1>Nuevo envio</h1>
           </div>
           <div class="buttons-head col-md-6 col-sm-12 mb-3">
-            <button type="button" class="btn btn-secondary" onclick="history.back()"><i class="fa fa-arrow-left"></i> Volver </button>
+            <button type="button" id="btn_volver_page" class="btn btn-secondary" onclick="history.back()"><i class="fa fa-arrow-left"></i> Volver </button>
           </div>
           <div class="row" id="card-egresos">
             <form id="form_nuevo">
@@ -56,19 +56,19 @@ $lugares = Lugar::all();
                       <p class="fs-4 fw-bold"><i class="fa fa-solid fa-boxes-packing"></i> Datos remitente</p>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="nombre_remitente" value="" placeholder="Remitente" name="nombre_origen" autocomplete="off">
+                          <input type="text" class="form-control validate[required,maxSize[60]]" id="nombre_remitente" value="" placeholder="Remitente" name="nombre_origen" autocomplete="off">
                           <label for="nombre_remitente">Nombre remitente</label>
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="ci_remitente" value="" name="ci_origen" placeholder="Carnet de identidad" autocomplete="off">
+                          <input type="text" class="form-control validate[required,maxSize[12]]" id="ci_remitente" value="" name="ci_origen" placeholder="Carnet de identidad" autocomplete="off">
                           <label for="ci_remitente">C.I. remitente</label>
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="date" class="form-control" placeholder="Fecha envio" name="fecha_envio" id="fecha_envio" required value="<?= date('Y-m-d') ?>">
+                          <input type="date" class="form-control validate[required,future[<?= date('Y-m-d') ?>]]" placeholder="Fecha envio" name="fecha_envio" id="fecha_envio" required value="<?= date('Y-m-d') ?>">
                           <label for="">Fecha envio</label>
                         </div>
                       </div>
@@ -81,7 +81,7 @@ $lugares = Lugar::all();
                       </div>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control" placeholder="Observacion" name="detalle_envio">
+                          <input type="text" class="form-control validate[required,maxSize[70]]" placeholder="Observacion" name="detalle_envio">
                           <label for="">Detalle envio</label>
                         </div>
                       </div>
@@ -94,13 +94,13 @@ $lugares = Lugar::all();
                       <p class="fs-4 fw-bold"><i class="fa fa-solid fa-people-carry-box"></i> Datos receptor</p>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control" placeholder="Nombre receptor" name="nombre_destino">
+                          <input type="text" class="form-control validate[required,maxSize[60]]" placeholder="Nombre receptor" name="nombre_destino">
                           <label for="">Nombre receptor</label>
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="ci_receptor" value="" name="ci_destino" placeholder="Carnet de identidad" autocomplete="off">
+                          <input type="text" class="form-control validate[required,maxSize[12]]" id="ci_receptor" value="" name="ci_destino" placeholder="Carnet de identidad" autocomplete="off">
                           <label for="ci_receptor">C.I. receptor</label>
                         </div>
                       </div>
@@ -120,14 +120,22 @@ $lugares = Lugar::all();
                         <div class="form-floating mb-3">
                           <select name="destino" class="form-select">
                             <?php foreach ($lugares as $lugar) : ?>
-                              <option value="<?= $lugar['idLugar'] ?>"><?= $lugar['lugar'] ?></option>
+                              <?php if ($lugar['idLugar'] != $user->idLugar) : ?>
+                                <option value="<?= $lugar['idLugar'] ?>"><?= $lugar['lugar'] ?></option>
+                              <?php endif; ?>
                             <?php endforeach; ?>
                           </select>
                           <label for="">Destino</label>
                         </div>
                       </div>
                       <div class="col-md-4">
-                        <button id="btn_agregar_fotos" type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="collapse_nuevo_1 collapse_nuevo_2"><i class="fa fa-camera"></i> ¿Agregar fotos?</button>
+                        <div class="form-floating mb-3">
+                          <input type="number" step="any" name="costo" placeholder="Costo envio" class="form-control validate[required]">
+                          <label for="">Costo envio (Bs.)</label>
+                        </div>
+                      </div>
+                      <div class="mt-2 mb-2">
+                        <button id="btn_agregar_fotos" type="button" class="btn btn-primary float-end " data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="collapse_nuevo_1 collapse_nuevo_2"><i class="fa fa-camera"></i> ¿Agregar fotos?</button>
                       </div>
                     </div>
                   </div>
@@ -141,17 +149,15 @@ $lugares = Lugar::all();
                       <div class="col-md-6">
                         <select id="camaras_select" class="form-select mb-2"></select>
                         <button type="button" class="btn btn-success rounded-pill" onclick="capturar()"><i class="fa fa-camera"></i> Capturar</button>
-                        <button onclick="detenerStream()" type="button" class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="collapse_nuevo_1 collapse_nuevo_2">Seguir editando</button>
-                        <div class="d-flex flex-wrap gap-3 mt-3" id="imgs_capturas">
-
-                        </div>
+                        <button onclick="volverForm()" type="button" class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="collapse_nuevo_1 collapse_nuevo_2">Seguir editando</button>
+                        <div class="d-flex flex-wrap gap-3 mt-3" id="imgs_capturas"></div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="card-footer">
-                  <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-success shadow">GUARDAR</button>
+                  <div class="card-footer">
+                    <div class="d-flex justify-content-center">
+                      <button type="submit" class="btn btn-success shadow" id="btn_submit_form">GUARDAR</button>
+                    </div>
                   </div>
                 </div>
               </div><!-- end card -->
@@ -161,7 +167,8 @@ $lugares = Lugar::all();
       </main>
     </div>
   </div><!-- fin contenedor -->
-
+  <script src="../assets/jquery/jqueryValidationEngine-es.min.js"></script>
+  <script src="../assets/jquery/jqueryValidation.min.js"></script>
   <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../js/scripts.js"></script>
   <script src="../assets/datatables/datatables.jquery.min.js"></script>
