@@ -21,6 +21,7 @@ class EnvioController {
     $envio->celular_destino = $data['celular_destino'];
     $envio->id_lugar_destino = $data['destino'];
     $envio->costo = $data['costo'];
+    $envio->observacion_envio = $data['observaciones'];
     $res = $envio->insert();
     if ($res > 0) {
       $envio->idEnvio = $res;

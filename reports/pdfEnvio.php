@@ -20,12 +20,12 @@ if (!isset($_GET['enid'])) {
   }
 
   $width = 217;
-  $height = 330;
+  $height = 340;
 
   // Calculamos alto de pagina (unicamente por el campo detalle_envio) Es el unico que puede ser mas grande
   $tam_fuente = 8;
   $w = $width - 16; // width - margins-x
-  $lineas = contarLineas($envio->detalle_envio, $w, $tam_fuente);
+  $lineas = contarLineas($envio->detalle_envio, $w, $tam_fuente) + contarLineas($envio->observacion_envio ?? '', $w, $tam_fuente);
   $aumentar = $lineas > 1 ? ($lineas - 1) * $tam_fuente : 0;
   $height = $height + $aumentar;
 
@@ -63,6 +63,7 @@ if (!isset($_GET['enid'])) {
             <tr><td colspan="500" align="left"><b>Celular: </b>' . $envio->celular_origen . '</td></tr>
             <tr><td colspan="500" align="left"><b>Fecha - hora envio: </b>' . date('d/m/Y H:i:s', strtotime($envio->fecha_envio)) . '</td></tr>
             <tr><td colspan="500"><b>Detalles: </b>' . $envio->detalle_envio . '</td></tr>
+            <tr><td colspan="500"><b>Observaciones: </b>' . ($envio->observacion_envio ?? '') . '</td></tr>
             <tr><td colspan="500" align="left"><b>Costo de envio: </b> Bs. ' . $costo . '</td></tr>
             <tr><td colspan="500" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td></tr></table>';
   $fechaEstimada = ($envio->fecha_estimada != null && $envio->fecha_estimada != '') ? date('d/m/Y', strtotime($envio->fecha_estimada)) : 'S/F';

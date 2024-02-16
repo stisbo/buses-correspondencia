@@ -43,6 +43,7 @@ class Envio {
   public string $capturas; // nombres de las imagenes separados por |
 
   public float $costo; // costo de envio
+  public string $observacion_envio;
 
   public function __construct($idEnvio = 0) {
     if ($idEnvio == 0) {
@@ -66,11 +67,11 @@ class Envio {
     try {
       $fechaenvio = date('Y-m-d\TH:i:s.v', strtotime($this->fecha_envio));
       $fechaestimada = date('Y-m-d\TH:i:s.v', strtotime($this->fecha_estimada));
-      $sql = "INSERT INTO tblEnvio(codigo, id_usuario_envio, estado, detalle_envio, fecha_envio, fecha_estimada, nombre_origen, ci_origen, celular_origen, id_lugar_origen, nombre_destino, ci_destino, id_lugar_destino, celular_destino, costo)
-      VALUES (:codigo, :idUsuarioEnvio, 'ENVIADO', :detalle_envio, :fecha_envio, :fecha_estimada, :nombre_origen, :ci_origen, :celular_origen, :id_lugar_origen, :nombre_destino, :ci_destino, :id_lugar_destino, :celular_destino, :costo);";
+      $sql = "INSERT INTO tblEnvio(codigo, id_usuario_envio, estado, detalle_envio, fecha_envio, fecha_estimada, nombre_origen, ci_origen, celular_origen, id_lugar_origen, nombre_destino, ci_destino, id_lugar_destino, celular_destino, costo, observacion_envio)
+      VALUES (:codigo, :idUsuarioEnvio, 'ENVIADO', :detalle_envio, :fecha_envio, :fecha_estimada, :nombre_origen, :ci_origen, :celular_origen, :id_lugar_origen, :nombre_destino, :ci_destino, :id_lugar_destino, :celular_destino, :costo, :observacion_envio);";
       $con = Database::getInstace();
       $stmt = $con->prepare($sql);
-      $params = ['codigo' => $this->codigo, 'idUsuarioEnvio' => $this->id_usuario_envio, 'detalle_envio' => $this->detalle_envio, 'fecha_envio' => $fechaenvio, 'fecha_estimada' => $fechaestimada, 'nombre_origen' => $this->nombre_origen, 'ci_origen' => $this->ci_origen, 'celular_origen' => $this->celular_origen, 'id_lugar_origen' => $this->id_lugar_origen, 'nombre_destino' => $this->nombre_destino, 'ci_destino' => $this->ci_destino, 'id_lugar_destino' => $this->id_lugar_destino, 'celular_destino' => $this->celular_destino, 'costo' => $this->costo];
+      $params = ['codigo' => $this->codigo, 'idUsuarioEnvio' => $this->id_usuario_envio, 'detalle_envio' => $this->detalle_envio, 'fecha_envio' => $fechaenvio, 'fecha_estimada' => $fechaestimada, 'nombre_origen' => $this->nombre_origen, 'ci_origen' => $this->ci_origen, 'celular_origen' => $this->celular_origen, 'id_lugar_origen' => $this->id_lugar_origen, 'nombre_destino' => $this->nombre_destino, 'ci_destino' => $this->ci_destino, 'id_lugar_destino' => $this->id_lugar_destino, 'celular_destino' => $this->celular_destino, 'costo' => $this->costo, 'observacion_envio'=>$this->observacion_envio];
       $res = $stmt->execute($params);
       if ($res) {
         $idEnvio = $con->lastInsertId();
@@ -138,6 +139,7 @@ class Envio {
     $this->id_usuario_entrega = 0;
     $this->capturas = '';
     $this->costo = 0.0;
+    $this->observacion_envio = '';
   }
   public function load($row) {
     foreach ($this as $nombre => $valor) {

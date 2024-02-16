@@ -81,14 +81,20 @@ $lugares = Lugar::all();
                       </div>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control validate[required,maxSize[70]]" placeholder="Observacion" name="detalle_envio">
+                          <input type="text" class="form-control validate[required,maxSize[150]]" placeholder="Observacion" name="detalle_envio">
                           <label for="">Detalle envio</label>
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control" placeholder="Observacion" name="celular_origen" value="">
+                          <input type="text" class="form-control validate[custom[celular]]" placeholder="Celular remitente" name="celular_origen" value="">
                           <label for="">Celular (opcional)</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" placeholder="Observación envio" name="observaciones" value="">
+                          <label for="">Observaciones (opcional)</label>
                         </div>
                       </div>
                       <p class="fs-4 fw-bold"><i class="fa fa-solid fa-people-carry-box"></i> Datos receptor</p>
@@ -106,7 +112,7 @@ $lugares = Lugar::all();
                       </div>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="celular_destino" value="" name="celular_destino" placeholder="Celular Destino" autocomplete="off">
+                          <input type="text" class="form-control validate[custom[celular]]" id="celular_destino" value="" name="celular_destino" placeholder="Celular Destino" autocomplete="off">
                           <label for="celular_destino">Celular receptor (opcional)</label>
                         </div>
                       </div>
