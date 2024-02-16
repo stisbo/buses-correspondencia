@@ -22,6 +22,10 @@ class EnvioController {
     $envio->id_lugar_destino = $data['destino'];
     $envio->costo = $data['costo'];
     $envio->observacion_envio = $data['observaciones'];
+    $envio->peso = $data['peso'] == '' ? 0 : $data['peso'];
+    $envio->cantidad = $data['cantidad'] == '' ? 0 : $data['cantidad'];
+    $envio->pagado = $data['pagado'];
+    $envio->saldado = $data['pagado'] == 'PAGADO' ? 1 : 0;
     $res = $envio->insert();
     if ($res > 0) {
       $envio->idEnvio = $res;
