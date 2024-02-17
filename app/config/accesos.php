@@ -1,20 +1,34 @@
 <?php
 
 namespace App\Config;
-
+use App\Config\Database;
 class Accesos {
+  /**
+   * @param string target indica el valor para comparar en la base de datos y encontrar las credenciales
+   * @param bool xPin indica si target debe ser comparado por pin o por digest << 0 = comparar por digest>> | << 1 = comparar por pin >> (Default = 0)
+   */
+  public static function getCredentialsEmp($target, $xPin = 0){
+    try {
+      // $con = Database::getInstaceEmpresa();
+      // $sql = "SELECT * FROM tblEmpresasData";
+      // $sql .= $xPin ? " WHERE pin = '$target';" : " WHERE digest = '$target';";
+      // $stmt = $con->prepare($sql);
+      // $stmt->execute();
+      // return $stmt->fetch();
+      $empresas = [
+        'bolivar' => ['base' => 'correspondencia_bolivar', 'dominio' => 'bolivar', 'permisos' => [], 'digest' => '5932b1a8b1d0dd9fc4a5c10d6b47e3016ad0f6e1078f3d5f0ce6fe38bfc20065'],
+        'illimani' => ['base' => 'correpondencia2', 'dominio' => 'illimani', 'permisos' => []],
+      ];
+      return $empresas['bolivar'];
+    } catch (\Throwable $th) {
+      //throw $th;
+      print_r($th);
+    }
+    return [];
+  }
   public static function setAccesos($pin) { // seteamos las cookies para un nuevo ingreso login
-    // Nos conectamos a la base de datos para obtener la base, permisos, etc
-    // $con = Database::connectionEmpresa();
-    // $sql = "SELECT * FROM empresas WHERE pin = ?";
-    // $stmt = $con->prepare($sql);
-    // $stmt->execute([$pin]);
-    // $empresa = $stmt->fetch();
-    // echo 'PASO UNONNNNNNN ---  ' . $pin;
-    $empresas = [
-      'bolivar' => ['base' => 'correspondencia', 'dominio' => 'bolivar', 'permisos' => []],
-      'illimani' => ['base' => 'correpondencia2', 'dominio' => 'illimani', 'permisos' => []],
-    ];
+    // $empresas = self::getCredentialsEmp($pin, 1);
+
     $empresa = isset($empresas[$pin]) ? $empresas[$pin] : null;
     if ($empresa) {
       $_SESSION['base'] = $empresa['base'];
