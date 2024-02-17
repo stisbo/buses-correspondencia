@@ -5,9 +5,9 @@ namespace App\Config;
 use App\Config\Accesos;
 
 class Database {
-  private $serverName = "";
-  private $username = "";
-  private $password = "";
+  private static $serverName = "";
+  private static $username = "";
+  private static $password = "";
   private static $con = null;
   private function __construct() {
   }
@@ -18,7 +18,7 @@ class Database {
     }
     $databaseName = $base;
     try {
-      self::$con = new \PDO("sqlsrv:Server=".self::$serverName.";Database=$databaseName;Encrypt=0;TrustServerCertificate=1", self::$username, self::$password);
+      self::$con = new \PDO("sqlsrv:Server=" . self::$serverName . ";Database=$databaseName;Encrypt=0;TrustServerCertificate=1", self::$username, self::$password);
       self::$con->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     } catch (\PDOException $e) {
       self::$con = null;
@@ -30,7 +30,7 @@ class Database {
   public static function getInstaceEmpresa() {
     $databaseName = 'empresas';
     try {
-      self::$con = new \PDO("sqlsrv:Server=".self::$serverName.";Database=$databaseName;Encrypt=0;TrustServerCertificate=1", self::$username, self::$password);
+      self::$con = new \PDO("sqlsrv:Server=" . self::$serverName . ";Database=$databaseName;Encrypt=0;TrustServerCertificate=1", self::$username, self::$password);
       self::$con->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     } catch (\PDOException $e) {
       self::$con = null;
@@ -40,7 +40,7 @@ class Database {
   }
   public static function getInstanceX($databaseName) {
     try {
-      self::$con = new \PDO("sqlsrv:Server=".self::$serverName.";Database=$databaseName;Encrypt=0;TrustServerCertificate=1", self::$username, self::$password);
+      self::$con = new \PDO("sqlsrv:Server=" . self::$serverName . ";Database=$databaseName;Encrypt=0;TrustServerCertificate=1", self::$username, self::$password);
       self::$con->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     } catch (\PDOException $e) {
       self::$con = null;
