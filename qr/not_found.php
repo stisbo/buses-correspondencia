@@ -29,7 +29,6 @@
     </div>
   </section>
   <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../js/scripts.js"></script>
 </body>
 
 </html>

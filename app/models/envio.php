@@ -255,4 +255,23 @@ class Envio {
     }
     return [];
   }
+  /**
+   * Envio con sonsulta externa su propia base de datos
+   * @param \PDO $con
+   * @param int $idEnvio
+   * @return array
+   */
+  public static function getEnvioExterno($con, $idEnvio) {
+    $response = [];
+    try {
+      $consulta = self::$sql . " WHERE e.idEnvio = $idEnvio";
+      $stmt = $con->prepare($consulta);
+      $stmt->execute();
+      $response = $stmt->fetch();
+    } catch (\Throwable $th) {
+      //throw $th;
+      print_r($th);
+    }
+    return $response;
+  }
 }

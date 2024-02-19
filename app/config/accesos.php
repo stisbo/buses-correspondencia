@@ -18,7 +18,7 @@ class Accesos {
       // $stmt->execute();
       // return $stmt->fetch();
       $empresas = [
-        'bolivar' => ['base' => 'correspondencia', 'dominio' => 'bolivar', 'permisos' => [], 'digest' => '5932b1a8b1d0dd9fc4a5c10d6b47e3016ad0f6e1078f3d5f0ce6fe38bfc20065'],
+        'bolivar' => ['base' => 'correspondencia', 'dominio' => 'bolivar', 'permisos' => [], 'digest' => '5932b1a8b1d0dd9fc4a5c10d6b47e3016ad0f6e1078f3d5f0ce6fe38bfc20065', 'nombre' => 'BOLIVAR SRL.'],
         'illimani' => ['base' => 'correpondencia2', 'dominio' => 'illimani', 'permisos' => []],
       ];
       return $empresas['bolivar'];
@@ -32,19 +32,23 @@ class Accesos {
     $empresa = self::getCredentialsEmp($pin, 1);
     if ($empresa) {
       $_SESSION['base'] = $empresa['base'];
-      $_SESSION['dominio'] = $empresa['dominio'];
+      $_SESSION['dominio'] = json_encode($empresa['permisos']);
       $_SESSION['permisos'] = $empresa['permisos'];
       session_write_close();
       setcookie('base', $empresa['base'], time() + 64800, '/', false);
       setcookie('permisos', json_encode($empresa['permisos']), time() + 64800, '/', false);
-      setcookie('_emp', json_encode(array('dominio' => $empresa['dominio'])), time() + 64800, '/', false);
+      setcookie('_emp', json_encode(array('dominio' => $empresa['dominio'], 'nombre' => $empresa['nombre'], 'digest' => $empresa['digest'])), time() + 64800, '/', false);
       return 1;
     } else { // no existe el PIN
       return -1;
     }
   }
-  public static function getPermisos() {
+  public static function getPermisosCookies() {
     return $_COOKIE['permisos'];
+  }
+
+  public static function getNombresCookies() {
+    return json_decode($_COOKIE['_emp']);
   }
   public static function delAccesos() {
     unset($_COOKIE['base']);

@@ -5,13 +5,17 @@ require_once('../tcpdf/tcpdf.php');
 require_once('../app/models/envio.php');
 require_once('./letras-numeros.php');
 
+use App\Config\Accesos;
 use App\Models\Envio;
 
 if (!isset($_GET['enid'])) {
   echo '<h1 align="center">Parametro id necesario</h1>';
   die();
 } else {
-  $subdominio = 'BOLIVAR';
+  $datos_emp = Accesos::getNombresCookies();
+  // print_r($datos_emp);
+  // die();
+  $subdominio = $datos_emp->nombre;
   $nombre_suc = 'Sucursal Central';
   $ciudad = 'La Paz - Bolivia';
   $envio = new Envio($_GET['enid']);
@@ -44,7 +48,9 @@ if (!isset($_GET['enid'])) {
   $pdf->SetFont('Helvetica', '', $tam_fuente);
   $pdf->addPage();
 
-  $codeqr = "https://contaqr.com/buses/reports/pdfEnvio.php?enid=" . $envio->idEnvio;
+  $baseUrl = "https://contaqr.com/buses";
+  // $baseUrl = "http://localhost/correspondencia";
+  $codeqr = $baseUrl . "/qr/?rq=" . $datos_emp->digest . "_" . $envio->idEnvio;
 
   $style = array(
     'border' => false,
