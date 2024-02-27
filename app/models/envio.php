@@ -115,6 +115,22 @@ class Envio {
     return 0;
   }
 
+  public function delete() {
+    try {
+      $sql = "DELETE FROM tblEnvio WHERE idEnvio = :idEnvio";
+      $con = Database::getInstace();
+      $stmt = $con->prepare($sql);
+      $params = ['idEnvio' => $this->idEnvio];
+      $res = $stmt->execute($params);
+      if ($res) {
+        return 10;
+      }
+    } catch (\Throwable $th) {
+      //throw $th;
+      print_r($th);
+    }
+    return -1;
+  }
   public function objectNull() {
     $this->idEnvio = 0;
     $this->codigo = "";
@@ -242,9 +258,10 @@ class Envio {
     }
     return [];
   }
-  public static function get_mis_envios($idUsuario) {
+  public static function get_mis_envios($idUsuario, $rol) {
     try {
-      $sql = self::$sql . " WHERE e.id_usuario_envio = $idUsuario";
+      $sql = self::$sql;
+      $sql .= $rol != 'ADMIN' ? " WHERE e.id_usuario_envio = $idUsuario" : '';
       $con = Database::getInstace();
       $stmt = $con->prepare($sql);
       $stmt->execute();

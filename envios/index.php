@@ -11,7 +11,7 @@ require_once('../app/models/envio.php');
 
 use App\Models\Envio;
 
-$envios = Envio::get_mis_envios($user->idUsuario);
+$envios = Envio::get_mis_envios($user->idUsuario, $user->rol);
 ?>
 
 <!DOCTYPE html>
@@ -73,7 +73,7 @@ $envios = Envio::get_mis_envios($user->idUsuario);
                           case 'ENVIADO':
                             $clss = 'bg-warning';
                             break;
-                          case 'RECIBIDO':
+                          case 'EN ALMACEN':
                             $clss = 'bg-primary';
                             break;
                           case 'ENTREGADO':
@@ -89,13 +89,19 @@ $envios = Envio::get_mis_envios($user->idUsuario);
                         <tr>
                           <td class="text-center"><?= $envio['idEnvio'] ?></td>
                           <td class="text-center"><?= $codigo ?></td>
-                          <td class="text-center"><?= $envio['nombre_origen'] ?> | <?= $envio['ci_origen'] ?></td>
-                          <td class="text-center"><?= $envio['nombre_destino'] ?> | <?= $envio['ci_destino'] ?></td>
+                          <td class="text-center align-middle"><?= $envio['nombre_origen'] ?> | <?= $envio['ci_origen'] ?></td>
+                          <td class="text-center align-middle"><?= $envio['nombre_destino'] ?> | <?= $envio['ci_destino'] ?></td>
                           <td class="text-center"><?= $envio['destino'] ?></td>
                           <td class="text-center"><?= date('d/m/Y', strtotime($envio['fecha_envio'])) ?></td>
-                          <td class="text-center"><span class="badge <?= $clss ?>"><?= $envio['estado'] ?></span></td>
-                          <td class="text-center">
-                            <a href="../reports/pdfEnvio.php?enid=<?= $envio['idEnvio'] ?>" target="_blank" class="btn btn-secondary"><i class="fa fa-solid fa-print"></i></a>
+                          <td class="text-center align-middle"><span class="badge <?= $clss ?>"><?= $envio['estado'] ?></span></td>
+                          <td class="align-middle">
+                            <div class="d-flex gap-1">
+                              <a href="../reports/pdfEnvio.php?enid=<?= $envio['idEnvio'] ?>" target="_blank" class="btn btn-secondary"><i class="fa fa-solid fa-print"></i></a>
+                              <?php if ($user->rol == 'ADMIN') : ?>
+                                <a href="./edit.php?enid=<?= $envio['idEnvio'] ?>" class="btn btn-primary"><i class="fa fa-pen"></i></a>
+                                <button type="button" class="btn btn-danger" data-bs-toggle='modal' data-bs-target='#modal_eliminar_envio' data-id="<?= $envio['idEnvio'] ?>"><i class="fa fa-trash"></i></button>
+                              <?php endif; ?>
+                            </div>
                           </td>
                         </tr>
                       <?php endforeach; ?>

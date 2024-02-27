@@ -42,7 +42,7 @@ if (isset($_COOKIE['user_obj'])) {
             <div class="card shadow">
               <div class="card-header d-flex flex-wrap justify-content-between">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                  <button type="button" class="btn btn-outline-success fw-bold filter-btns" data-value="RECIBIDO">RECIBIDOS</button>
+                  <button type="button" class="btn btn-outline-success fw-bold filter-btns" data-value="EN ALMACEN">EN ALMACEN</button>
                   <button type="button" class="btn btn-outline-warning fw-bold filter-btns" data-value="ENVIADO">PENDIENTES</button>
                   <button type="button" class="btn btn-outline-primary fw-bold active filter-btns" data-value="">TODOS</button>
                 </div>

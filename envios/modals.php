@@ -15,3 +15,24 @@
     </div>
   </div>
 </div>
+
+<!-- Modal Eliminar envio -->
+<div class="modal fade" id="modal_eliminar_envio" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title ">Eliminar envio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="id_envio_delete">
+        <div class="alert alert-danger text-center" role="alert">
+          ¿Está seguro? La eliminación es <b>irreversible</b>.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="eliminar_envio()" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>

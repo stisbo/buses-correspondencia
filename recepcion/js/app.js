@@ -37,8 +37,8 @@ async function listar(data) {
 function generarTabla(data) {
   let html = '';
   data.forEach((element) => {
-    let clsEstado = element.estado == 'RECIBIDO' ? 'text-bg-success' : 'text-bg-warning';
-    let estado = element.estado == 'RECIBIDO' ? 'RECIBIDO' : 'PENDIENTE';
+    let clsEstado = element.estado == 'EN ALMACEN' ? 'text-bg-success' : 'text-bg-warning';
+    let estado = element.estado == 'EN ALMACEN' ? 'EN ALMACEN' : 'PENDIENTE';
     let fechaEnvio = new Date(element.fecha_envio);
     let fechaLlegada = element.fecha_llegada ? new Date(element.fecha_llegada).toLocaleDateString() : 'No llegó';
     let opciones = `
