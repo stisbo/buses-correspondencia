@@ -56,7 +56,7 @@ $lugares = Lugar::all();
                       <p class="fs-4 fw-bold"><i class="fa fa-solid fa-boxes-packing"></i> Datos remitente</p>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control validate[required,maxSize[60]]" id="nombre_remitente" value="" placeholder="Remitente" name="nombre_origen" autocomplete="off">
+                          <input type="text" class="form-control validate[required,maxSize[60]]" id="nombre_remitente" value="asdfasdfasdfadsasdf" placeholder="Remitente" name="nombre_origen" autocomplete="off">
                           <label for="nombre_remitente">Nombre remitente</label>
                         </div>
                       </div>

@@ -27,7 +27,7 @@ async function enviarForm(e) {
     });
     if (res.status == 'success') {
       $.toast({
-        heading: '<b>PAGO AGREGADO</b>',
+        heading: '<b>ENVIO AGREGADO</b>',
         text: 'Se agregó el pago exitosamente',
         icon: 'success',
         position: 'top-right',
@@ -44,7 +44,7 @@ async function enviarForm(e) {
       formulario = false;
       $.toast({
         heading: '<b>OCURRIÓ UN ERROR</b>',
-        text: 'No se pudo agregar el pago',
+        text: 'No se pudo agregar el envio',
         icon: 'danger',
         position: 'top-right',
         stack: 2,

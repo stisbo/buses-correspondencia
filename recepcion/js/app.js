@@ -98,6 +98,18 @@ async function cargarEntrega(e) {
     const envio = res.envio;
     const fechaEnvio = new Date(envio.fecha_envio);
     const estado = envio.estado == 'RECIBIDO' ? 'RECIBIDO' : 'PENDIENTE';
+    const pagado = envio.pagado == 'POR PAGAR' ? `<div class="row"><div class="form-floating mb-3 col-lg-4">
+      <input type="number" id="costo_id" class="form-control" value="${envio.costo.toFixed(2)}" placeholder="Costo" readonly>
+      <label for="costo_id">Costo</label>
+    </div>
+    <div class="form-floating mb-3 col-lg-4">
+      <input type="number" id="pago_recibido" class="form-control" value="${envio.costo.toFixed(2)}" placeholder="Recibido">
+      <label for="pago_recibido">Recibido</label>
+    </div>
+    <div class="form-floating mb-3 col-lg-4">
+      <input type="number" id="cambio" class="form-control" value="0.00" placeholder="Cambio | Vuelto" readonly>
+      <label for="cambio">Cambio</label>
+    </div></div>` : '';
     const fechaRecibido = envio.fecha_llegada ? new Date(envio.fecha_llegada).toLocaleDateString() : 'S/F';
     html = `<div class="row fs-5">
       <input type="hidden" id="id_envio_entrega" value="${envio.idEnvio}"> 
@@ -108,12 +120,13 @@ async function cargarEntrega(e) {
       <div class="col-lg-6"><b>Destinatario:</b> ${envio.nombre_destino} CI: ${envio.ci_destino} CEL: ${envio.celular_destino ?? ''}</div>
       <div class="col-lg-6"><b>Destino: </b>${envio.destino} <b>Estado: </b>${estado}</div>
       <p class="fw-bold mb-0 mt-3">DETALLES ENTREGA</p>
-      <div class="col-lg-6">
+      <div class="col-lg-4">
         <div class="form-floating mb-3">
           <input type="text" class="form-control" id="obs_entrega" value="" placeholder="Remitente" autocomplete="off">
           <label for="obs_entrega">Observación (opcional)</label>
         </div>
       </div>
+      <div class="col-lg-8">${pagado}</div>
     </div>`;
     $("#body_modal_entregar_envio").html(html)
   } else {
@@ -151,4 +164,23 @@ $(document).on('show.bs.modal', '#modal_ver_capturas', async (e) => {
 })
 $(document).on('hide.bs.modal', '#modal_ver_capturas', () => {
   $("#body_capturas").html('')
+})
+
+$(document).on('input', '#pago_recibido', (e) => {
+  const costo = parseFloat($("#costo_id").val());
+  if (e.target.value == '') {
+    e.target.value = 0;
+    $("#cambio").val(0);
+  } else {
+    const recibido = parseFloat(e.target.value);
+    let cambio = recibido - costo;
+    cambio = Math.floor(cambio * 100) / 100;
+    if (cambio < 0) {
+      $("#cambio").addClass('is-invalid');
+      $("#cambio").val(cambio.toFixed(2));
+    } else {
+      $("#cambio").removeClass('is-invalid');
+      $("#cambio").val(cambio.toFixed(2));
+    }
+  }
 })

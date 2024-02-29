@@ -62,7 +62,8 @@ $lugares = Lugar::all();
           </div>
           <div class="row" id="card-egresos">
             <form id="form_edit">
-              <input type="hidden" name="id_usuario_envio" value="<?= $user->idUsuario ?>">
+              <input type="hidden" name="id_usuario_envio" value="<?= $envio->id_usuario_envio ?>">
+              <input type="hidden" name="idEnvio" value="<?= $envio->idEnvio ?>">
               <div class="card shadow">
                 <div class="card-body">
                   <div class="collapse multi-collapse show" id="collapse_nuevo_1">
@@ -112,9 +113,9 @@ $lugares = Lugar::all();
                       <div class="col-md-2">
                         <div class="form-floating mb-2">
                           <select name="pagado" class="form-select">
-                            <option value="PAGADO" class="bg-success" style="--bs-bg-opacity: .5;" <?= $envio->estado == 'PAGADO' ? 'selected' : '' ?>>PAGADO</option>
-                            <option value="POR PAGAR" class="bg-danger" style="--bs-bg-opacity: .5;" <?= $envio->estado == 'POR PAGAR' ? 'selected' : '' ?>>POR PAGAR</option>
-                            <option value="SERVICIO INTERNO" class="bg-warning" style="--bs-bg-opacity: .5;" <?= $envio->estado == 'SERVICIO INTERNO' ? 'selected' : '' ?>>SERVICIO INTERNO</option>
+                            <option value="PAGADO" class="bg-success" style="--bs-bg-opacity: .5;" <?= $envio->pagado == 'PAGADO' ? 'selected' : '' ?>>PAGADO</option>
+                            <option value="POR PAGAR" class="bg-danger" style="--bs-bg-opacity: .5;" <?= $envio->pagado == 'POR PAGAR' ? 'selected' : '' ?>>POR PAGAR</option>
+                            <option value="SERVICIO INTERNO" class="bg-warning" style="--bs-bg-opacity: .5;" <?= $envio->pagado == 'SERVICIO INTERNO' ? 'selected' : '' ?>>SERVICIO INTERNO</option>
                           </select>
                           <label for="">¿Envio por pagar?</label>
                         </div>
@@ -129,7 +130,7 @@ $lugares = Lugar::all();
                           <label for="">Observaciones (opcional)</label>
                         </div>
                         <div class="form-floating mb-3">
-                          <input type="date" class="form-control validate[required,future[<?= date('Y-m-d') ?>]]" placeholder="Observación envio" name="fecha_envio" value="<?= date('Y-m-d', strtotime($envio->fecha_envio)) ?>">
+                          <input type="date" class="form-control validate[required]" placeholder="Observación envio" name="fecha_envio" value="<?= date('Y-m-d', strtotime($envio->fecha_envio)) ?>">
                           <label for="">Fecha de envio</label>
                         </div>
                       </div>

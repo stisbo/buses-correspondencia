@@ -40,6 +40,36 @@ class EnvioController {
     }
   }
 
+  public function update($data, $files) {
+    $envio = new Envio($data['idEnvio']);
+    $envioAnt = clone $envio;
+    if ($envio->idEnvio) {
+      $envio->detalle_envio = $data['detalle_envio'];
+      $envio->nombre_origen = $data['nombre_origen'];
+      $envio->ci_origen = $data['ci_origen'];
+      $envio->celular_origen = $data['celular_origen'];
+      $envio->id_lugar_destino = $data['destino'];
+      $envio->fecha_envio = $data['fecha_envio'] . 'T' . date('H:i');
+      $envio->fecha_estimada = $data['fecha_estimada'];
+      $envio->nombre_destino = $data['nombre_destino'];
+      $envio->ci_destino = $data['ci_destino'];
+      $envio->celular_destino = $data['celular_destino'];
+      $envio->costo = $data['costo'];
+      $envio->observacion_envio = $data['observaciones'];
+      $envio->peso = $data['peso'] == '' ? 0 : $data['peso'];
+      $envio->cantidad = $data['cantidad'] == '' ? 0 : $data['cantidad'];
+      $envio->pagado = $data['pagado'];
+      $envio->saldado = $data['pagado'] == 'PAGADO' ? 1 : 0;
+      $res = $envio->update($envioAnt);
+      if ($res) {
+        echo json_encode(['status' => 'success', 'mensaje' => 'Envio actualizado exitosamente', 'envio' => $envio]);
+      } else {
+        echo json_encode(['status' => 'error', 'mensaje' => 'Error al actualizar el envio']);
+      }
+    } else {
+      echo json_encode(['status' => 'error', 'mensaje' => 'Envio no encontrado']);
+    }
+  }
   public function delete($data) {
     if (isset($data['idEnvio'])) {
       $envio = new Envio($data['idEnvio']);
