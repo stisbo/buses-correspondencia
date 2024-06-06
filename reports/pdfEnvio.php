@@ -15,9 +15,10 @@ if (!isset($_GET['enid'])) {
   $datos_emp = Accesos::getNombresCookies();
   // print_r($datos_emp);
   // die();
-  $subdominio = $datos_emp->nombre;
+  $subdominio = $datos_emp->name;
+  $details_emp = $datos_emp->details;
+  $cel_emp = $datos_emp->phone;
   $nombre_suc = 'Sucursal Central';
-  $ciudad = 'La Paz - Bolivia';
   $envio = new Envio($_GET['enid']);
   if ($envio->idEnvio == 0) {
     header('Location: ../');
@@ -25,11 +26,11 @@ if (!isset($_GET['enid'])) {
   }
 
   $width = 217;
-  $height = 250;
+  $height = 285;
 
   // Calculamos alto de pagina (unicamente por el campo detalle_envio) Es el unico que puede ser mas grande
   $tam_fuente = 8;
-  $w = $width - 16; // width - margins-x
+  $w = $width - 2; // width - margins-x
   $lineas = contarLineas($envio->detalle_envio, $w, $tam_fuente) + contarLineas($envio->observacion_envio ?? '', $w, $tam_fuente);
   $aumentar = $lineas > 1 ? ($lineas - 1) * $tam_fuente : 0;
   $height = $height + $aumentar;
@@ -43,12 +44,12 @@ if (!isset($_GET['enid'])) {
   $pdf->SetTitle('Nota de envio');
   $pdf->setPrintHeader(false);
   $pdf->setPrintFooter(false);
-  $pdf->SetMargins(8, 0, 8, false);
+  $pdf->SetMargins(0, 0, 1, false);
   $pdf->SetAutoPageBreak(true, 2);
   $pdf->SetFont('Helvetica', '', $tam_fuente);
   $pdf->addPage();
 
-  $baseUrl = "https://contaqr.com/buses";
+  $baseUrl = "https://webinventario.com/buses";
   // $baseUrl = "http://localhost/correspondencia";
   $codeqr = $baseUrl . "/qr/?rq=" . $datos_emp->digest . "_" . $envio->idEnvio;
 
@@ -65,10 +66,10 @@ if (!isset($_GET['enid'])) {
   $costo_literal = numtoletras($costo);
   $porPagar = $envio->pagado ?? 'POR PAGAR';
   $tabla = '<table border="0" cellpadding="0">
-  <tr><td colspan="380" align="center"><b style="font-size:110%;">NOTA DE ENVIO</b></td><td colspan="120"></td></tr>
-  <tr><td colspan="380" align="center"><b>' . $subdominio . '</b></td><td colspan="120"></td></tr>
-  <tr><td colspan="380" align="center">' . $ciudad . '</td><td colspan="120"></td></tr>
-  <tr><td colspan="380" align="center" >ENCOMIENDAS </td><td colspan="120"></td></tr>
+  <tr><td colspan="380" align="center"><b style="font-size:118%;">' . $subdominio . '</b></td><td colspan="120"></td></tr>
+  <tr><td colspan="380" align="center" style="font-size:90%;">' . $details_emp . '</td><td colspan="120"></td></tr>
+  <tr><td colspan="380" align="center">Cel. ' . $cel_emp . '</td><td colspan="120"></td></tr>
+  <tr><td colspan="380" align="center" ><b>NOTA DE ENVIO</b> </td><td colspan="120"></td></tr>
   <tr><td colspan="90"></td><td colspan="200" align="center" style="border:1px solid #000"><b>' . $porPagar . '</b></td><td colspan="90"></td><td colspan="120"></td></tr>
   <tr><td colspan="500" style="border-bottom: 1px solid #000;"><b style="font-size:120%;">DESTINO: ' . $envio->destino . '</b></td></tr>
   </table>';
@@ -93,7 +94,7 @@ if (!isset($_GET['enid'])) {
   $tabla .= '<tr><td colspan="200" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td><td colspan="100"></td><td colspan="200" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td></tr>';
   $tabla .= '<tr><td colspan="200" align="center" style="padding: 8px; text-align: center;">' . $subdominio . '</td><td colspan="100"></td><td colspan="200" align="center" style="padding: 8px; text-align: center;">Firma remitente</td></tr>';
   $tabla .= '</table>';
-  $pdf->WriteHTMLCell(0, 0, 8, 0, $tabla, 0, 0);
+  $pdf->WriteHTMLCell(0, 0, 0, 0, $tabla, 0, 0);
   $pdf->output('dombre.pdf', 'I');
 }
 

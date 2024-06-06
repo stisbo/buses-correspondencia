@@ -5,7 +5,7 @@ var idCap = 0;
 $camaras_sel = $('#camaras_select');
 async function enviarForm(e) {
   if (!formulario) {
-    formulario = false;
+    formulario = true;
     const data = $(e).serializeArray();
     console.log(data);
     const form = new FormData();

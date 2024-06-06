@@ -4,15 +4,19 @@ require_once('../app/config/database.php');
 require_once('../tcpdf/tcpdf.php');
 require_once('../app/models/envio.php');
 
+use App\Config\Accesos;
 use App\Models\Envio;
 
 if (!isset($_GET['enid'])) {
   echo '<h1 align="center">Parametro id necesario</h1>';
   die();
 } else {
-  $subdominio = 'BOLIVAR';
-  $nombre_suc = 'Sucursal Central';
-  $ciudad = 'La Paz - Bolivia';
+  $datos_emp = Accesos::getNombresCookies();
+  // print_r($datos_emp);
+  // die();
+  $subdominio = $datos_emp->name;
+  $details_emp = $datos_emp->details;
+  $cel_emp = $datos_emp->phone;
   $envio = new Envio($_GET['enid']);
   if ($envio->idEnvio == 0) {
     header('Location: ../');
@@ -48,13 +52,13 @@ if (!isset($_GET['enid'])) {
   $pdf->SetFont('Helvetica', '', $tam_fuente);
   $pdf->addPage();
 
-  $content = '<h2 style="text-align:center;">NOTA DE ENTREGA</h2>';
+  $content = '<h4 style="text-align:center;">NOTA DE ENTREGA</h4>';
   $pdf->writeHTML($content, true, 0, true, 0);
 
   $tabla = '<table border="0" cellpadding="0">
-  <tr><td colspan="500" align="center"><b>' . $subdominio . '</b></td></tr>
-            <tr><td colspan="500" align="center">' . $nombre_suc . '</td></tr>
-            <tr><td colspan="500" align="center">' . $ciudad . '</td></tr>
+  <tr><td colspan="500" align="center" style="font-size:130%;"><b>' . $subdominio . '</b></td></tr>
+  <tr><td colspan="500" align="center">' . $details_emp . '</td></tr>
+            <tr><td colspan="500" align="center">Cel. ' . $cel_emp . '</td></tr>
             <tr><td colspan="500" align="center"><b>CÓDIGO: </b>' . $envio->idEnvio . '-' . $envio->codigo . '</td></tr>
             <tr><td colspan="500" align="center" >NOTA ORIGINAL</td></tr>
             <tr><td colspan="500" style="padding: 8px; border-bottom: 1px solid #000;"></td></tr>
@@ -83,7 +87,7 @@ if (!isset($_GET['enid'])) {
 
   $tabla .= '<table border="0" cellpadding="0"><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr>';
   $tabla .= '<tr><td colspan="200" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td><td colspan="100"></td><td colspan="200" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td></tr>';
-  $tabla .= '<tr><td colspan="200" align="center" style="padding: 8px; text-align: center;">Firma/Sello Emp. Bolivar</td><td colspan="100"></td><td colspan="200" align="center" style="padding: 8px; text-align: center;">Firma destinatario</td></tr>';
+  $tabla .= '<tr><td colspan="200" align="center" style="padding: 8px; text-align: center;">' . $subdominio . '</td><td colspan="100"></td><td colspan="200" align="center" style="padding: 8px; text-align: center;">Firma destinatario</td></tr>';
   $tabla .= '</table>';
   $pdf->WriteHTMLCell(0, 0, '', '', $tabla, 0, 0);
   $pdf->output('notaEntrega.pdf', 'I');
