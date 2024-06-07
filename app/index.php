@@ -7,7 +7,7 @@ date_default_timezone_set('America/La_Paz');
 require_once 'config/database.php';
 require_once 'config/accesos.php';
 
-include_once 'autoload.php';
+include_once 'load_core.php';
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 
 $parts = explode('/', $url);

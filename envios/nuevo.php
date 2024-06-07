@@ -156,6 +156,12 @@ $lugares = Lugar::all();
                           <label for="">Destino</label>
                         </div>
                       </div>
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <select name="trip_id" id="trips_select" class="form-select"></select>
+                          <label for="">Viaje Salida</label>
+                        </div>
+                      </div>
                       <div class="mt-2 mb-2">
                         <button id="btn_agregar_fotos" type="button" class="btn btn-primary float-end " data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="collapse_nuevo_1 collapse_nuevo_2"><i class="fa fa-camera"></i> ¿Agregar fotos?</button>
                       </div>

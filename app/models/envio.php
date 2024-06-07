@@ -48,6 +48,7 @@ class Envio {
   public int $cantidad;
   public string $pagado; // PAGADO | POR PAGAR
   public int $saldado; // 0 = no saldado | 1 = saldado
+  public int $trip_id;
   public function __construct($idEnvio = 0) {
     if ($idEnvio == 0) {
       $this->objectNull();
@@ -70,11 +71,11 @@ class Envio {
     try {
       $fechaenvio = date('Y-m-d\TH:i:s.v', strtotime($this->fecha_envio));
       $fechaestimada = date('Y-m-d\TH:i:s.v', strtotime($this->fecha_estimada));
-      $sql = "INSERT INTO tblEnvio(codigo, id_usuario_envio, estado, detalle_envio, fecha_envio, fecha_estimada, nombre_origen, ci_origen, celular_origen, id_lugar_origen, nombre_destino, ci_destino, id_lugar_destino, celular_destino, costo, observacion_envio, peso, cantidad, pagado, saldado)
-      VALUES (:codigo, :idUsuarioEnvio, 'ENVIADO', :detalle_envio, :fecha_envio, :fecha_estimada, :nombre_origen, :ci_origen, :celular_origen, :id_lugar_origen, :nombre_destino, :ci_destino, :id_lugar_destino, :celular_destino, :costo, :observacion_envio, :peso, :cantidad, :pagado, :saldado);";
+      $sql = "INSERT INTO tblEnvio(codigo, id_usuario_envio, estado, detalle_envio, fecha_envio, fecha_estimada, nombre_origen, ci_origen, celular_origen, id_lugar_origen, nombre_destino, ci_destino, id_lugar_destino, celular_destino, costo, observacion_envio, peso, cantidad, pagado, saldado, trip_id)
+      VALUES (:codigo, :idUsuarioEnvio, 'ENVIADO', :detalle_envio, :fecha_envio, :fecha_estimada, :nombre_origen, :ci_origen, :celular_origen, :id_lugar_origen, :nombre_destino, :ci_destino, :id_lugar_destino, :celular_destino, :costo, :observacion_envio, :peso, :cantidad, :pagado, :saldado, :trip_id);";
       $con = Database::getInstace();
       $stmt = $con->prepare($sql);
-      $params = ['codigo' => $this->codigo, 'idUsuarioEnvio' => $this->id_usuario_envio, 'detalle_envio' => $this->detalle_envio, 'fecha_envio' => $fechaenvio, 'fecha_estimada' => $fechaestimada, 'nombre_origen' => $this->nombre_origen, 'ci_origen' => $this->ci_origen, 'celular_origen' => $this->celular_origen, 'id_lugar_origen' => $this->id_lugar_origen, 'nombre_destino' => $this->nombre_destino, 'ci_destino' => $this->ci_destino, 'id_lugar_destino' => $this->id_lugar_destino, 'celular_destino' => $this->celular_destino, 'costo' => $this->costo, 'observacion_envio' => $this->observacion_envio, 'peso' => $this->peso, 'cantidad' => $this->cantidad, 'pagado' => $this->pagado, 'saldado' => $this->saldado];
+      $params = ['codigo' => $this->codigo, 'idUsuarioEnvio' => $this->id_usuario_envio, 'detalle_envio' => $this->detalle_envio, 'fecha_envio' => $fechaenvio, 'fecha_estimada' => $fechaestimada, 'nombre_origen' => $this->nombre_origen, 'ci_origen' => $this->ci_origen, 'celular_origen' => $this->celular_origen, 'id_lugar_origen' => $this->id_lugar_origen, 'nombre_destino' => $this->nombre_destino, 'ci_destino' => $this->ci_destino, 'id_lugar_destino' => $this->id_lugar_destino, 'celular_destino' => $this->celular_destino, 'costo' => $this->costo, 'observacion_envio' => $this->observacion_envio, 'peso' => $this->peso, 'cantidad' => $this->cantidad, 'pagado' => $this->pagado, 'saldado' => $this->saldado, 'trip_id' => $this->trip_id];
       $res = $stmt->execute($params);
       if ($res) {
         $idEnvio = $con->lastInsertId();
@@ -163,6 +164,7 @@ class Envio {
     $this->cantidad = 0;
     $this->pagado = '';
     $this->saldado = 0;
+    $this->trip_id = 0;
   }
   public function load($row) {
     foreach ($this as $nombre => $valor) {
@@ -261,7 +263,7 @@ class Envio {
   public static function get_mis_envios($idUsuario, $rol) {
     try {
       $sql = self::$sql;
-      $sql .= $rol != 'ADMIN' ? " WHERE e.id_usuario_envio = $idUsuario" : '';
+      $sql .= $rol != 'ADMIN' ? " WHERE e.id_usuario_envio = $idUsuario ORDER BY e.idEnvio DESC" : ' ORDER BY e.idEnvio DESC';
       $con = Database::getInstace();
       $stmt = $con->prepare($sql);
       $stmt->execute();

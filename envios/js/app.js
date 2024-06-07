@@ -5,8 +5,9 @@ $(document).ready(() => {
     info: false,
     scrollX: true,
     columnDefs: [
-      // { orderable: false, targets: [5, 7] }
+      { orderable: false, targets: [5, 7] }
     ],
+    order: []
   })
 })
 

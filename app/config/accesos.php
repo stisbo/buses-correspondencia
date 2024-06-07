@@ -18,8 +18,8 @@ class Accesos {
       // $stmt->execute();
       // return $stmt->fetch();
       $empresas = [
-        'bolivar' => ['base' => 'correspondencia', 'dominio' => 'bolivar', 'permisos' => [], 'digest' => '5932b1a8b1d0dd9fc4a5c10d6b47e3016ad0f6e1078f3d5f0ce6fe38bfc20065', 'name' => 'Trans. 25 de Diciembre', 'details' => 'Uyuni - Oruro - Potosí - La Paz - Cocha.', 'phone' => '67258945'],
-        // 'bolivar' => ['base' => 'correspondencia_bolivar', 'dominio' => 'bolivar', 'permisos' => [], 'digest' => '5932b1a8b1d0dd9fc4a5c10d6b47e3016ad0f6e1078f3d5f0ce6fe38bfc20065', 'nombre' => 'BOLIVAR SRL.'],
+        'bolivar' => ['base' => 'correspondencia', 'dominio' => 'bolivar', 'permisos' => [], 'digest' => '5932b1a8b1d0dd9fc4a5c10d6b47e3016ad0f6e1078f3d5f0ce6fe38bfc20065', 'name' => 'Trans. 25 de Diciembre', 'details' => 'Uyuni - Oruro - Potosí - La Paz - Cocha.', 'phone' => '67258945', 'xcode' => '25_diciembre'],
+        // 'bolivar' => ['base' => 'correspondencia_25dic', 'dominio' => 'bolivar', 'permisos' => [], 'digest' => '5932b1a8b1d0dd9fc4a5c10d6b47e3016ad0f6e1078f3d5f0ce6fe38bfc20065', 'nombre' => 'BOLIVAR SRL.'],
         'illimani' => ['base' => 'correpondencia2', 'dominio' => 'illimani', 'permisos' => []],
       ];
       return $empresas['bolivar'];
@@ -38,7 +38,7 @@ class Accesos {
       session_write_close();
       setcookie('base', $empresa['base'], time() + 64800, '/', false);
       setcookie('permisos', json_encode($empresa['permisos']), time() + 64800, '/', false);
-      setcookie('_emp', json_encode(array('dominio' => $empresa['dominio'], 'name' => $empresa['name'], 'digest' => $empresa['digest'], 'details' => $empresa['details'], 'phone' => $empresa['phone'])), time() + 64800, '/', false);
+      setcookie('_emp', json_encode(array('dominio' => $empresa['dominio'], 'name' => $empresa['name'], 'digest' => $empresa['digest'], 'details' => $empresa['details'], 'phone' => $empresa['phone'], 'xcode' => base64_encode($empresa['xcode']))), time() + 64800, '/', false);
       return 1;
     } else { // no existe el PIN
       return -1;

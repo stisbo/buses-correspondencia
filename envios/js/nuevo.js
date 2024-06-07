@@ -2,7 +2,11 @@ var formulario = false;
 var camaras = [];
 var capturas = {};
 var idCap = 0;
+var trips = [];
 $camaras_sel = $('#camaras_select');
+$(document).ready(() => {
+  loadTrips();
+})
 async function enviarForm(e) {
   if (!formulario) {
     formulario = true;
@@ -53,6 +57,27 @@ async function enviarForm(e) {
     }
   }
 };
+
+async function loadTrips() {
+  const res = await $.ajax({
+    url: '../app/external/trips_starting_today',
+    type: 'POST',
+    dataType: 'json'
+  })
+  if (res.success) {
+    trips = res.data;
+    loadTripSelect();
+  }
+}
+function loadTripSelect() {
+  let html = '<option value="">Seleccionar</option>';
+  trips.forEach(t => {
+    let hora = t.departure_time.split(':');
+    let fecha = t.departure_date.split('-');
+    html += `<option value="${t.id}">${fecha[2] + '/' + fecha['1']} ${hora[0] + ':' + hora[1]} - ${t.destino}</option>`;
+  })
+  $('#trips_select').html(html);
+}
 
 $("#form_nuevo").validationEngine({
   promptPosition: "topLeft",
