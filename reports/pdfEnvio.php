@@ -18,7 +18,7 @@ if (!isset($_GET['enid'])) {
   $subdominio = $datos_emp->name;
   $details_emp = $datos_emp->details;
   $cel_emp = $datos_emp->phone;
-  $nombre_suc = 'Sucursal Central';
+  // $nombre_suc = 'Sucursal Central';
   $envio = new Envio($_GET['enid']);
   if ($envio->idEnvio == 0) {
     header('Location: ../');
@@ -66,7 +66,8 @@ if (!isset($_GET['enid'])) {
   $costo_literal = numtoletras($costo);
   $porPagar = $envio->pagado ?? 'POR PAGAR';
   $tabla = '<table border="0" cellpadding="0">
-  <tr><td colspan="380" align="center"><b style="font-size:118%;">' . $subdominio . '</b></td><td colspan="120"></td></tr>
+  <tr><td colspan="380" align="center" style="line-height:2;font-size:70%;"><b>ASOCIACIÓN DE TRANSPORTE LIBRE</b></td><td colspan="120"></td></tr>
+  <tr><td colspan="380" align="center" style="line-height:1;"><b style="font-size:118%;">' . $subdominio . '</b></td><td colspan="120"></td></tr>
   <tr><td colspan="380" align="center" style="font-size:90%;">' . $details_emp . '</td><td colspan="120"></td></tr>
   <tr><td colspan="380" align="center">Cel. ' . $cel_emp . '</td><td colspan="120"></td></tr>
   <tr><td colspan="380" align="center" ><b>NOTA DE ENVIO</b> </td><td colspan="120"></td></tr>

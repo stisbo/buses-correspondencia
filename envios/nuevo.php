@@ -62,7 +62,7 @@ $lugares = Lugar::all();
                       </div>
                       <div class="col-md-3">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control validate[required,maxSize[12]]" id="ci_remitente" value="" name="ci_origen" placeholder="Carnet de identidad" autocomplete="off">
+                          <input type="text" class="form-control validate[maxSize[12]]" id="ci_remitente" value="" name="ci_origen" placeholder="Carnet de identidad" autocomplete="off">
                           <label for="ci_remitente">C.I. / NIT. remitente</label>
                         </div>
                       </div>
@@ -104,10 +104,11 @@ $lugares = Lugar::all();
                           </select>
                           <label for="">¿Envio por pagar?</label>
                         </div>
-                        <div class="form-floating mb-3">
+                        <input type="hidden" name="peso" value="0">
+                        <!-- <div class="form-floating mb-3">
                           <input type="number" name="peso" step="any" placeholder="Peso" class="form-control validate[required]">
                           <label for="peso">Peso [kg]</label>
-                        </div>
+                        </div> -->
                       </div>
                       <div class="col-md-4">
                         <div class="form-floating mb-2">
@@ -134,7 +135,7 @@ $lugares = Lugar::all();
                       </div>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control validate[required,custom[celular]]" id="celular_destino" value="" name="celular_destino" placeholder="Celular Destino" autocomplete="off">
+                          <input type="text" class="form-control validate[custom[celular]]" id="celular_destino" value="" name="celular_destino" placeholder="Celular Destino" autocomplete="off">
                           <label for="celular_destino">Celular receptor</label>
                         </div>
                       </div>

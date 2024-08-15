@@ -32,10 +32,11 @@ if (isset($_COOKIE['user_obj'])) {
                 </div>
                 <div class="card-body">
                   <form id="form_login">
-                    <div class="form-floating mb-3">
+                    <input id="inputPin" type="hidden" name="pin" value="25_dic" />
+                    <!-- <div class="form-floating mb-3">
                       <input class="form-control" id="inputPin" type="text" placeholder="PIN" name="pin" required />
                       <label for="inputPin">PIN</label>
-                    </div>
+                    </div> -->
                     <div class="form-floating mb-3">
                       <input class="form-control" id="inputEmail" type="text" placeholder="Usuario Alias" name="usuario" required />
                       <label for="inputEmail">Usuario</label>
