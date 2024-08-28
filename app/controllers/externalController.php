@@ -11,4 +11,20 @@ class ExternalController {
     $trips = External::get_trips($con, []);
     echo json_encode(['success' => true, 'data' => $trips]);
   }
+  public function total_amount_trip($query) {
+    if (!isset($query['trip_id']) && !isset($query['key'])) {
+      echo json_encode(['success' => false, 'message' => 'trip_id is required']);
+    } else {
+      $keydbname = json_decode(base64_decode($query['key']), true);
+      // modificar para mas empresas
+      $dbnames = ['boletos_25_diciembre' => 'correspondencia_25dic'];
+      $con = Database::getInstanceX($dbnames[$keydbname['dbname']] ?? '');
+      if ($con == null) {
+        echo json_encode(['success' => false, 'message' => 'Error conexion interno [missing names]']);
+      } else {
+        $total = External::get_total_amount_trip($con, $query['trip_id']);
+        echo json_encode(['success' => true, 'data' => $total]);
+      }
+    }
+  }
 }

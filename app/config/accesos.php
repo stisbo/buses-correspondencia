@@ -18,8 +18,8 @@ class Accesos {
       // $stmt->execute();
       // return $stmt->fetch();
       $empresas = [
-        'bolivar' => ['base' => 'correspondencia', 'dominio' => 'bolivar', 'permisos' => [], 'digest' => '5932b1a8b1d0dd9fc4a5c10d6b47e3016ad0f6e1078f3d5f0ce6fe38bfc20065', 'name' => '25 DE DICIEMBE', 'details' => 'Uyuni - Oruro - Potosí - La Paz - Cocha.', 'phone' => '67258945', 'xcode' => '25_diciembre'],
-        // 'bolivar' => ['base' => 'correspondencia_25dic', 'dominio' => 'bolivar', 'permisos' => [], 'digest' => '5932b1a8b1d0dd9fc4a5c10d6b47e3016ad0f6e1078f3d5f0ce6fe38bfc20065', 'nombre' => 'BOLIVAR SRL.'],
+        'bolivar' => ['base' => 'correspondencia_25dic', 'dominio' => '25 de diciembre', 'permisos' => [], 'digest' => '5932b1a8b1d0dd9fc4a5c10d6b47e3016ad0f6e1078f3d5f0ce6fe38bfc20065', 'name' => '25 DE DICIEMBE', 'details' => 'Uyuni - Oruro - Potosí - La Paz - Cocha.', 'phone' => '67258945', 'xcode' => '25_diciembre'],
+        // 'bolivar' => ['base' => 'correspondencia', 'dominio' => 'bolivar', 'permisos' => [], 'digest' => '5932b1a8b1d0dd9fc4a5c10d6b47e3016ad0f6e1078f3d5f0ce6fe38bfc20065', 'name' => '25 DE DICIEMBE', 'details' => 'Uyuni - Oruro - Potosí - La Paz - Cocha.', 'phone' => '67258945', 'xcode' => '25_diciembre'],
         'illimani' => ['base' => 'correpondencia2', 'dominio' => 'illimani', 'permisos' => []],
       ];
       return $empresas['bolivar'];
@@ -49,7 +49,7 @@ class Accesos {
   }
 
   public static function getNombresCookies() {
-    return json_decode($_COOKIE['_emp']);
+    return json_decode($_COOKIE['_emp'] ?? "[]");
   }
   public static function delAccesos() {
     unset($_COOKIE['base']);

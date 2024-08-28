@@ -28,4 +28,22 @@ class External {
     }
     return [];
   }
+  /**
+   * Retorna un nuevo calo
+   * @param mixed $con
+   * @param mixed $trip_id
+   * @return mixed
+   */
+  public static function get_total_amount_trip($con, $trip_id) {
+    try {
+      $sql = "SELECT sum(costo) total FROM tblEnvio WHERE trip_id = $trip_id AND (pagado = 'PAGADO' OR pagado = 'SERVICIO INTERNO'); ";
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      return $row['total'] ?? 0;
+    } catch (\Throwable $th) {
+      var_dump($th);
+    }
+    return 0;
+  }
 }

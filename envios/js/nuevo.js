@@ -71,10 +71,17 @@ async function loadTrips() {
 }
 function loadTripSelect() {
   let html = '<option value="">Seleccionar</option>';
+  let seleccionado = false;
+  let selected = '';
   trips.forEach(t => {
     let hora = t.departure_time.split(':');
     let fecha = t.departure_date.split('-');
-    html += `<option value="${t.id}">${fecha[2] + '/' + fecha['1']} ${hora[0] + ':' + hora[1]} - ${t.destino}</option>`;
+    if (fechaProxima(fecha, hora) && !seleccionado) {
+      console.log('Se seleccionara ', t)
+      selected = 'selected'
+      seleccionado = true;
+    } else selected = ''
+    html += `<option value="${t.id}" ${selected}>${fecha[2] + '/' + fecha[1]} ${hora[0] + ':' + hora[1]} - ${t.destino}</option>`;
   })
   $('#trips_select').html(html);
 }
@@ -189,4 +196,12 @@ function eliminarCaptura(id) {
   if (delete capturas[id]) {
     $("#idCap-" + id).remove();
   }
+}
+/**
+ * @returns {boolean} TRUE si es una fecha mayor a la actual FALSE si no es mayor  
+ */
+function fechaProxima(fecha, hora) {
+  const ahora = new Date();
+  const newHour = new Date(fecha.join('-') + 'T' + [hora[0], hora[1], '00'].join(':'))
+  return newHour.getTime() > ahora.getTime()
 }

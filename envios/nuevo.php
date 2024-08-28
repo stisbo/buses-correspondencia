@@ -150,7 +150,9 @@ $lugares = Lugar::all();
                           <select name="destino" class="form-select">
                             <?php foreach ($lugares as $lugar) : ?>
                               <?php if ($lugar['idLugar'] != $user->idLugar) : ?>
-                                <option value="<?= $lugar['idLugar'] ?>"><?= $lugar['lugar'] ?></option>
+                                <option value="<?= $lugar['idLugar'] ?>" <?= $lugar['lugar'] == 'ORURO' ? 'selected' : '' ?>>
+                                  <?= $lugar['lugar'] ?>
+                                </option>
                               <?php endif; ?>
                             <?php endforeach; ?>
                           </select>

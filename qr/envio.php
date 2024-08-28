@@ -30,7 +30,7 @@ $con = null;
   <nav class="navbar bg-primary">
     <div class="container">
       <a class="navbar-brand text-white" href="#">
-        <b>EMPRESA</b>
+        <b><?= ($credentials['name']) ?? 'EMPRESA' ?></b>
       </a>
     </div>
   </nav>

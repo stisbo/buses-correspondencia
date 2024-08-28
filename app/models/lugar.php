@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Config\Database;
+use PDO;
 
 class Lugar {
 
@@ -71,7 +72,7 @@ class Lugar {
       $sql = "SELECT * FROM tblLugar";
       $stmt = $con->prepare($sql);
       $stmt->execute([]);
-      $rows = $stmt->fetchAll(); // Utiliza fetch en lugar de fetchAll
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC); // Utiliza fetch en lugar de fetchAll
       return $rows;
     } catch (\Throwable $th) {
       //throw $th;
