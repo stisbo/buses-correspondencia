@@ -17,12 +17,29 @@ class External {
         INNER JOIN locations c ON a.location_id_dest = c.id
         INNER JOIN buses d ON a.bus_id = d.id
         INNER JOIN drivers e ON a.driver_id = e.id
-        WHERE a.departure_date >= '$date'
+        WHERE a.departure_date = '$date'
         ORDER BY a.departure_date ASC;";
       $stmt = $con->prepare($sql);
       $stmt->execute();
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
       return $rows;
+    } catch (\Throwable $th) {
+      var_dump($th);
+    }
+    return [];
+  }
+  public static function get_trip($con, $trip_id) {
+    try {
+      $sql = "SELECT a.*, b.location as origen, c.location as destino, d.placa, e.fullname as conductor FROM trips a
+        INNER JOIN locations b ON a.location_id_origin = b.id
+        INNER JOIN locations c ON a.location_id_dest = c.id
+        INNER JOIN buses d ON a.bus_id = d.id
+        INNER JOIN drivers e ON a.driver_id = e.id
+        WHERE a.id = $trip_id;";
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      return $row;
     } catch (\Throwable $th) {
       var_dump($th);
     }

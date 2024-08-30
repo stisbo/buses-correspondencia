@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Config\Database;
 use App\Config\Accesos;
+use PDO;
 
 class Envio {
   private static
@@ -292,5 +293,17 @@ class Envio {
       print_r($th);
     }
     return $response;
+  }
+  public static function getByTripId($con, $trip_id) {
+    try {
+      $sql = self::$sql . " WHERE e.trip_id = $trip_id";
+      $stmt = $con->prepare($sql);
+      $stmt->execute();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      return $rows;
+    } catch (\Throwable $th) {
+      //throw $th;
+    }
+    return [];
   }
 }

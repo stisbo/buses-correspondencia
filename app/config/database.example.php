@@ -48,6 +48,10 @@ class Database {
     }
     return self::$con;
   }
+  /**
+   * Devuelve la conexion para el modulo de boletos 
+   * @return \PDO|null
+   */
   public static function db_boletos() {
     $emp = Accesos::getNombresCookies();
     if (isset($emp->xcode)) {

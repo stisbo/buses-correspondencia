@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/La_Paz');
 if (isset($_COOKIE['user_obj'])) {
   $user = json_decode($_COOKIE['user_obj']);
 } else {
@@ -42,14 +43,25 @@ $envios = Envio::get_mis_envios($user->idUsuario, $user->rol);
             <h1>Envios</h1>
           </div>
           <div class="buttons-head col-md-6 col-sm-12 mb-3">
-            <a class="btn btn-primary" type="button" href="./nuevo.php"><i class="fa fa-solid fa-plus"></i> Nuevo Envio</a>
+            <a class="btn btn-primary" type="button" href="./nuevo.php"><i class="fa fa-solid fa-plus"></i> Nuevo Lista de envios</a>
           </div>
           <div class="row" id="card-egresos">
             <div class="card shadow">
               <div class="card-header">
-                <h4>
-                  <i class="fa fa-table"></i> Lista de proyectos
-                </h4>
+                <?php include('loader.php'); ?>
+                <div id="filters_head" class="d-flex flex-wrap gap-3 d-none">
+                  <div class="col-md-3 mb-3">
+                    <label for="fechaViaje" class="form-labe fw-semiboldl">Fecha</label>
+                    <input type="date" class="form-control" id="fechaViaje" name="fechaViaje" value="<?= date('Y-m-d') ?>">
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="trip_id" class="form-label fw-semibold">Viaje a</label>
+                    <select class="form-select" id="trip_id" name="trip_id" required></select>
+                  </div>
+                  <div class="col-md-2 mb-3 align-self-end">
+                    <button class="btn btn-outline-primary w-100" type="button" id="btn-search-filter"><i class="fas fa-filter me-2"></i>Filtrar</button>
+                  </div>
+                </div>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
@@ -67,25 +79,25 @@ $envios = Envio::get_mis_envios($user->idUsuario, $user->rol);
                       </tr>
                     </thead>
                     <tbody id="t_body_envios">
-                      <?php foreach ($envios as $envio) :
-                        $clss = '';
-                        switch ($envio['estado']) {
-                          case 'ENVIADO':
-                            $clss = 'bg-warning';
-                            break;
-                          case 'EN ALMACEN':
-                            $clss = 'bg-primary';
-                            break;
-                          case 'ENTREGADO':
-                            $clss = 'bg-success';
-                            break;
-                          default:
-                            $clss = '';
-                            break;
-                        }
-                        $imagenes = $envio['capturas'] ?? '';
-                        $codigo = $imagenes != '' ? "<button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modal_ver_capturas' data-id='" . $envio['idEnvio'] . "'>" . $envio['idEnvio'] . '-' . $envio['codigo'] . "</button>" : $envio['idEnvio'] . '-' . $envio['codigo'];
-                      ?>
+                      <!-- <?php foreach ($envios as $envio) :
+                              $clss = '';
+                              switch ($envio['estado']) {
+                                case 'ENVIADO':
+                                  $clss = 'bg-warning';
+                                  break;
+                                case 'EN ALMACEN':
+                                  $clss = 'bg-primary';
+                                  break;
+                                case 'ENTREGADO':
+                                  $clss = 'bg-success';
+                                  break;
+                                default:
+                                  $clss = '';
+                                  break;
+                              }
+                              $imagenes = $envio['capturas'] ?? '';
+                              $codigo = $imagenes != '' ? "<button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modal_ver_capturas' data-id='" . $envio['idEnvio'] . "'>" . $envio['idEnvio'] . '-' . $envio['codigo'] . "</button>" : $envio['idEnvio'] . '-' . $envio['codigo'];
+                            ?>
                         <tr>
                           <td class="text-center"><?= $envio['idEnvio'] ?></td>
                           <td class="text-center"><?= $codigo ?></td>
@@ -104,7 +116,7 @@ $envios = Envio::get_mis_envios($user->idUsuario, $user->rol);
                             </div>
                           </td>
                         </tr>
-                      <?php endforeach; ?>
+                      <?php endforeach; ?> -->
                     </tbody>
                   </table>
                 </div>

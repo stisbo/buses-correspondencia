@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Config\Accesos;
+use App\Config\Database;
 use App\Models\Envio;
 
 class EnvioController {
@@ -231,5 +233,14 @@ class EnvioController {
           </div>';
     }
     echo $html;
+  }
+  public function data_by_trip_id($query) {
+    if (!isset($query['trip_id'])) {
+      echo json_encode(['success' => false, 'message' => 'No se recibio el trip_id']);
+    } else {
+      $con = Database::getInstace();
+      $envios = Envio::getByTripId($con, $query['trip_id']);
+      echo json_encode(['success' => true, 'data' => $envios]);
+    }
   }
 }

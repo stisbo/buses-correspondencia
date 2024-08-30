@@ -4,17 +4,21 @@ require_once('../app/config/database.php');
 require_once('../tcpdf/tcpdf.php');
 require_once('../app/models/envio.php');
 require_once('./letras-numeros.php');
+require_once('../app/models/external.php');
 
 use App\Config\Accesos;
+use App\Config\Database;
 use App\Models\Envio;
+use App\Models\External;
 
 if (!isset($_GET['enid'])) {
   echo '<h1 align="center">Parametro id necesario</h1>';
   die();
 } else {
+
   $datos_emp = Accesos::getNombresCookies();
-  // print_r($datos_emp);
-  // die();
+  $conExt = Database::db_boletos();;
+
   $subdominio = $datos_emp->name;
   $details_emp = $datos_emp->details;
   $cel_emp = $datos_emp->phone;
@@ -24,13 +28,15 @@ if (!isset($_GET['enid'])) {
     header('Location: ../');
     die();
   }
-
-  $width = 217;
-  $height = 285;
+  $trip = External::get_trip($conExt, $envio->trip_id);
+  $fechaSalida = explode('-', $trip['departure_date'] ?? '---');
+  $horaSalida = explode(':', $trip['departure_time'] ?? ':::');
+  $width = 205;
+  $height = 210;
 
   // Calculamos alto de pagina (unicamente por el campo detalle_envio) Es el unico que puede ser mas grande
   $tam_fuente = 8;
-  $w = $width - 2; // width - margins-x
+  $w = $width - 0; // width - margins-x
   $lineas = contarLineas($envio->detalle_envio, $w, $tam_fuente) + contarLineas($envio->observacion_envio ?? '', $w, $tam_fuente);
   $aumentar = $lineas > 1 ? ($lineas - 1) * $tam_fuente : 0;
   $height = $height + $aumentar;
@@ -59,7 +65,7 @@ if (!isset($_GET['enid'])) {
     'fgcolor' => array(0, 0, 0),
     'bgcolor' => false
   );
-  $pdf->write2DBarcode($codeqr, 'QRCODE,Q', 150, 0, 55, 55, $style, 'N'); // 2 en vez de 20
+  $pdf->write2DBarcode($codeqr, 'QRCODE,Q', 146, 0, 55, 55, $style, 'N'); // 2 en vez de 20
   // $content = '<h2 style="text-align:center;">NOTA DE ENVIO</h2>';
   // $pdf->writeHTML($content, true, 0, true, 0);
   $costo = $envio->costo ?? 0.00;
@@ -79,7 +85,8 @@ if (!isset($_GET['enid'])) {
             <tr><td colspan="250"><b>CÓDIGO: ' . $envio->idEnvio . '-' . $envio->codigo . '</b></td><td colspan="250" align="right">' . date('d/m/Y H:i:s', strtotime($envio->fecha_envio)) . '</td></tr>
             <tr><td colspan="500"><b>Lugar origen: </b>' . $envio->origen . '</td></tr>
             <tr><td colspan="500" align="left"><b>Remitente: </b>' . strtoupper($envio->nombre_origen) . '</td></tr>
-            <tr><td colspan="500" style="border-bottom:1px solid #000;"><b>Destinatario: </b>' . strtoupper($envio->nombre_destino) . '</td></tr>
+            <tr><td colspan="500"><b>Destinatario: </b>' . strtoupper($envio->nombre_destino) . '</td></tr>
+            <tr><td colspan="500" style="border-bottom:1px solid #000;"><b>Salida: </b>' . $fechaSalida[2] . '/' . $fechaSalida[1] . ' ' . $horaSalida[0] . ':' . $horaSalida[1] . '</td></tr>
             </table>';
   $fechaEstimada = ($envio->fecha_estimada != null && $envio->fecha_estimada != '') ? date('d/m/Y', strtotime($envio->fecha_estimada)) : 'S/F';
   $tabla .= '<style>.border-bottom{border-bottom:1px solid #000;}.text-85{font-size:85%;;}</style>
@@ -91,10 +98,10 @@ if (!isset($_GET['enid'])) {
   <tr><td colspan="50"></td><td colspan="450">' . $costo_literal . '</td></tr>
   </table>';
 
-  $tabla .= '<table border="0" cellpadding="0"><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr>';
-  $tabla .= '<tr><td colspan="200" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td><td colspan="100"></td><td colspan="200" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td></tr>';
-  $tabla .= '<tr><td colspan="200" align="center" style="padding: 8px; text-align: center;">' . $subdominio . '</td><td colspan="100"></td><td colspan="200" align="center" style="padding: 8px; text-align: center;">Firma remitente</td></tr>';
-  $tabla .= '</table>';
+  // $tabla .= '<table border="0" cellpadding="0"><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr><tr><td colspan="500"></td></tr>';
+  // $tabla .= '<tr><td colspan="200" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td><td colspan="100"></td><td colspan="200" align="center" style="padding: 8px; text-align: left; border-bottom: 1px solid #000;"></td></tr>';
+  // $tabla .= '<tr><td colspan="200" align="center" style="padding: 8px; text-align: center;">' . $subdominio . '</td><td colspan="100"></td><td colspan="200" align="center" style="padding: 8px; text-align: center;">Firma remitente</td></tr>';
+  // $tabla .= '</table>';
   $pdf->WriteHTMLCell(0, 0, 0, 0, $tabla, 0, 0);
   $pdf->output('dombre.pdf', 'I');
 }

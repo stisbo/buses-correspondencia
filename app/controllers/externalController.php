@@ -11,6 +11,12 @@ class ExternalController {
     $trips = External::get_trips($con, []);
     echo json_encode(['success' => true, 'data' => $trips]);
   }
+  public function trips_starting_date($query) {
+    $con = Database::db_boletos();
+    $date = ($query['date'] == '' || $query['date'] == null) ? date('Y-m-d') : $query['date'];
+    $trips = External::get_trips($con, ['date' => $date]);
+    echo json_encode(['success' => true, 'data' => $trips]);
+  }
   public function total_amount_trip($query) {
     if (!isset($query['trip_id']) && !isset($query['key'])) {
       echo json_encode(['success' => false, 'message' => 'trip_id is required']);
