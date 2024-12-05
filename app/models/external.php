@@ -11,10 +11,11 @@ use PDO;
 class External {
   public static function get_trips($con, $filters) {
     try {
+      $today = date('Y-m-d');
       $date = isset($filters['date']) ?
         "WHERE a.departure_date = '" . $filters['date'] . "'" :
-        "WHERE a.departure_date = '" . date('Y-m-d') . "'";
-      $where = isset($filters['next_days']) ? "WHERE a.departure_date >= GETDATE()" : $date;
+        "WHERE a.departure_date = '$today'";
+      $where = isset($filters['next_days']) ? "WHERE a.departure_date >= '$today'" : $date;
       $sql = "SELECT a.*, b.location as origen, c.location as destino, d.placa, e.fullname as conductor FROM trips a 
         INNER JOIN locations b ON a.location_id_origin = b.id
         INNER JOIN locations c ON a.location_id_dest = c.id
