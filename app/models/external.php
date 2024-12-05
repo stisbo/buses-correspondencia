@@ -11,13 +11,16 @@ use PDO;
 class External {
   public static function get_trips($con, $filters) {
     try {
-      $date = $filters['date'] ?? date('Y-m-d');
+      $date = isset($filters['date']) ?
+        "WHERE a.departure_date = '" . $filters['date'] . "'" :
+        "WHERE a.departure_date = '" . date('Y-m-d') . "'";
+      $where = isset($filters['next_days']) ? "WHERE a.departure_date >= GETDATE()" : $date;
       $sql = "SELECT a.*, b.location as origen, c.location as destino, d.placa, e.fullname as conductor FROM trips a 
         INNER JOIN locations b ON a.location_id_origin = b.id
         INNER JOIN locations c ON a.location_id_dest = c.id
         INNER JOIN buses d ON a.bus_id = d.id
         INNER JOIN drivers e ON a.driver_id = e.id
-        WHERE a.departure_date = '$date'
+        $where 
         ORDER BY a.departure_date ASC;";
       $stmt = $con->prepare($sql);
       $stmt->execute();

@@ -8,7 +8,8 @@ use App\Models\External;
 class ExternalController {
   public function trips_starting_today($data) {
     $con = Database::db_boletos();
-    $trips = External::get_trips($con, []);
+    // next_days --> indica que obtenga todos los viajes mayor iguales a hoy
+    $trips = External::get_trips($con, ['next_days' => true]);
     echo json_encode(['success' => true, 'data' => $trips]);
   }
   public function trips_starting_date($query) {
