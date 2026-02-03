@@ -28,7 +28,8 @@ class EnvioController {
     $envio->cantidad = $data['cantidad'] == '' ? 0 : $data['cantidad'];
     $envio->pagado = $data['pagado'];
     $envio->saldado = $data['pagado'] == 'PAGADO' ? 1 : 0;
-    $envio->trip_id = $data['trip_id'] ?? 0;
+    // validar que sea entero y si no ponerle 0
+    $envio->trip_id = $data['trip_id'] != '' ? (int)$data['trip_id'] : 0;
     $res = $envio->insert();
     if ($res > 0) {
       $envio->idEnvio = $res;

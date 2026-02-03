@@ -67,4 +67,20 @@ class Database {
     }
     return null;
   }
+
+  public static function db_boletos_sucursal() {
+    $databaseName = 'boletos_';
+    $user = $_COOKIE['user_sucursal'];
+    if ($user != null && $user != '') {
+      try {
+        self::$con = new \PDO("sqlsrv:Server=" . self::$serverName . ";Database=$databaseName$user;Encrypt=0;TrustServerCertificate=1", self::$username, self::$password);
+        self::$con->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+      } catch (\PDOException $e) {
+        self::$con = null;
+        die("Error de conexión: " . $e->getMessage());
+      }
+      return self::$con;
+    }
+    return null;
+  }
 }

@@ -43,7 +43,9 @@ class UsuarioController {
     try {
       Accesos::delAccesos();
       setcookie('user_obj', '', time() - 64800, '/', false);
+      setcookie('user_sucursal', '', time() - 64800, '/', false);
       unset($_COOKIE['user_obj']);
+      unset($_COOKIE['user_sucursal']);
       echo json_encode(array('status' => 'success'));
     } catch (\Throwable $th) {
       echo json_encode(array('status' => 'error', 'message' => $th->getMessage()));

@@ -109,9 +109,12 @@ class Usuario {
       return -1;
     }
   }
+  /**
+   * Login function
+   */
   public static function exist($usuario, $pass): Usuario {
     $con = Database::getInstace();
-    $sql = "SELECT u.*, l.lugar FROM tblUsuario u JOIN tblLugar l ON u.idLugar = l.idLugar WHERE u.usuario = :usuario AND u.password = :password";
+    $sql = "SELECT u.*, l.lugar, l.sucursal FROM tblUsuario u JOIN tblLugar l ON u.idLugar = l.idLugar WHERE u.usuario = :usuario AND u.password = :password";
     $passHash = hash('sha256', $pass);
     $stmt = $con->prepare($sql);
     $stmt->execute(['usuario' => $usuario, 'password' => $passHash]);
@@ -119,6 +122,7 @@ class Usuario {
     $usuario = new Usuario();
     if ($row) {
       $usuario->load($row);
+      setcookie('user_sucursal', $row['sucursal'], time() + 64800, '/', false);
       return $usuario;
     } else {
       return $usuario;
