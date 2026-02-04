@@ -49,15 +49,24 @@ class External {
     }
     return [];
   }
+
+  public static function get_id_location_origen($con, $location) {
+    $sql = "SELECT l.idLugar FROM tblLugar l WHERE l.lugar LIKE '%$location%';";
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row['idLugar'] ?? 0;
+  }
   /**
    * Retorna un nuevo calo
    * @param mixed $con
    * @param mixed $trip_id
    * @return mixed
    */
-  public static function get_total_amount_trip($con, $trip_id) {
+  public static function get_total_amount_trip($con, $trip_id, $location) {
     try {
-      $sql = "SELECT sum(costo) total FROM tblEnvio WHERE trip_id = $trip_id AND (pagado = 'PAGADO' OR pagado = 'SERVICIO INTERNO'); ";
+      $id_location = self::get_id_location_origen($con, $location);
+      $sql = "SELECT sum(costo) total FROM tblEnvio WHERE trip_id = $trip_id AND (pagado = 'PAGADO' OR pagado = 'SERVICIO INTERNO') AND id_lugar_origen = $id_location; ";
       $stmt = $con->prepare($sql);
       $stmt->execute();
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
